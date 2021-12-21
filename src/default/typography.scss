@@ -1,0 +1,23 @@
+// Default theme typography
+$typography: (
+  primaryFontFamily: (
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+  ),
+  secondaryFontFamily: "times",
+  base: 16px,
+  thin: 100,
+  light: 300,
+  normal: 400,
+  medium: 500,
+  bold: 600,
+  heavy: 900,
+) !default;

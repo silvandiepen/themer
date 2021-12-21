@@ -1,0 +1,10 @@
+@function has-typography($key) {
+  @return map-has-key($typography, $key);
+}
+@function get-typography($key) {
+  @if map-has-key($typography, $key) {
+    @return map-get($typography, $key);
+  } @else {
+    @warn "#{$key} does not exist in typography";
+  }
+}

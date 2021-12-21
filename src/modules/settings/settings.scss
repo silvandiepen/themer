@@ -1,0 +1,7 @@
+@import "function";
+
+// Define empty customisable map for theme
+$theme-settings: () !default;
+
+// Merge theme settings with custom settings
+$settings: map-merge($settings, $theme-settings);

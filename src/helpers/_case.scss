@@ -1,0 +1,108 @@
+/// Has lowercase function
+// --------------------------
+/// Check if a string has any lowercase character
+///
+/// @access public
+/// @group case utilities
+/// @param {string} $string
+/// @return {boolean}
+///
+
+@function has-lowercase($str) {
+  $hasLowerCaseLetter: false;
+  $letterList: to-letter-list($str);
+  $lowercase: list-to-str(character-set("a-z"), "");
+
+  @for $i from 1 through length($letterList) {
+    @if str-contains($lowercase, nth($letterList, $i)) {
+      $hasLowerCaseLetter: true;
+    }
+  }
+  @return $hasLowerCaseLetter;
+}
+
+/// Kebab Case function
+// --------------------------
+/// Convert any string into a kebabcase string.
+///
+/// @access public
+/// @group case utilities
+/// @param {string} $string
+/// @return {string}
+///
+
+@function kebabCase($str) {
+  $new-str: allowed-characters(
+    to-lower-case(safe-characters($str)),
+    ("a-Z", "0-9", " ")
+  );
+
+  @return str-replace($new-str, " ", "-");
+}
+
+/// Sentence case function
+// --------------------------
+/// Convert any string into a sentence case.
+///
+/// @access public
+/// @group case utilities
+/// @param {string} $string
+/// @return {string}
+///
+@function sentenceCase($str) {
+  $letterList: to-letter-list($str);
+  $new-list: ();
+
+  @for $i from 1 through length($letterList) {
+    $char: nth($letterList, $i);
+
+    @if has-lowercase($char) or is-number($char) {
+      $new-list: append($new-list, $char);
+    } @else {
+      $new-list: append($new-list, " #{to-lower-case($char)}");
+    }
+  }
+
+  @return trim(list-to-str($new-list, ""));
+}
+
+@function cleanupBem($str) {
+  @return str-replace(str-replace($str, "--", "-"), "__", "_");
+}
+
+/// camelCaseToKebabCase function
+// --------------------------
+/// Convert a camelCase string to a kebab-case string
+///
+/// @access public
+/// @group case utilities
+/// @param {string} $string
+/// @return {string}
+///
+@function camelCaseToKebabCase($str) {
+  $str: cleanupBem($str);
+  $str: sentenceCase($str);
+  $str: kebabCase($str);
+
+  @return $str;
+}
+
+/// camelCaseToKebabCase function
+// --------------------------
+/// Convert a camelCase string to a kebab-case string
+///
+/// @access public
+/// @group case utilities
+/// @param {string} $string
+/// @return {string}
+///
+@function isCamelCase($str) {
+  @if has-lowercase($str) and
+    has-uppercase($str) and
+    is-lowercase(first-character($str)) and
+    has-unallowed-characters($str, character-set("a-Z"))
+  {
+    @return true;
+  }
+  @return false;
+}

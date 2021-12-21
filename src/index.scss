@@ -1,0 +1,21 @@
+@import "./default/index";
+@import "./helpers/index";
+@import "./modules/index";
+@import "./helpers/custom-properties";
+
+:root {
+  /*
+		Theme Settings
+	*/
+  @include customProperties($settings);
+
+  /*
+		Theme Colors
+	*/
+  @include customProperties($colors);
+
+  /*
+		Theme Typography
+	*/
+  @include customProperties($typography);
+}

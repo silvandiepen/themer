@@ -1,0 +1,10 @@
+@function has-setting($key) {
+  @return map-has-key($settings, $key);
+}
+@function get-setting($key) {
+  @if has-setting($key) {
+    @return map-get($settings, $key);
+  } @else {
+    @warn "#{$key} does not exist in settings";
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@sil/themer",
+  "version": "0.0.1",
+  "description": "Sass Variable Theming",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:app && npm run build:style",
+    "build:app": "sass test/app.scss dist/app.css",
+    "build:style": "sass test/style.scss dist/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silvandiepen/themer.git"
+  },
+  "keywords": [
+    "sass",
+    "variable",
+    "custom",
+    "property",
+    "theme"
+  ],
+  "author": "Sil van Diepen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/silvandiepen/themer/issues"
+  },
+  "homepage": "https://github.com/silvandiepen/themer#readme",
+  "dependencies": {
+    "sass": "^1.45.1"
+  }
+}

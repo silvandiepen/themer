@@ -1,0 +1,7 @@
+@import "function";
+
+// Define empty customisable map for theme
+$theme-typography: () !default;
+
+// Merge theme typography with custom typography
+$typgraphy: map-merge($typography, $theme-typography);

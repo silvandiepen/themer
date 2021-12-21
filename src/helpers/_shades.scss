@@ -1,0 +1,65 @@
+@use "sass:math";
+
+@function addShades($colors, $shades: ()) {
+  $mix-color: get-color("background");
+
+  @each $color-name, $color-value in $colors {
+    $colors: map-merge(
+      $colors,
+      (
+        $color-name: $color-value,
+      )
+    );
+
+    $normal: mix($color-value, $mix-color, 50) != $mix-color;
+
+    @if not $normal {
+      $mix-color: #e4e5ef;
+    }
+
+    @if length($shades) > 0 {
+      @each $shade in $shades {
+        $newColor: mix($color-value, $mix-color, $shade);
+
+        $clr: (
+          "#{$color-name}#{$shade}": $newColor,
+        );
+
+        $colors: map-merge($colors, $clr);
+      }
+    }
+  }
+  @return $colors;
+}
+
+@function addTextColor($colors) {
+  @each $color-name, $color-value in $colors {
+    $colors: map-set($colors, "#{$color-name}Text", getTextColor($color-value));
+  }
+
+  @return $colors;
+}
+
+@function getTextColor($color-value) {
+  $bg-lightness: lightness(get-color("background"));
+  $fg-lightness: lightness(get-color("foreground"));
+  $avg-lightness: math.div(($bg-lightness + $fg-lightness), 2);
+
+  $lightness: lightness($color-value);
+
+  @if $bg-lightness < $fg-lightness {
+    @if $lightness < $avg-lightness {
+      $color-value: variable(foreground);
+    } @else {
+      $color-value: variable(background);
+    }
+  } @else {
+    @if $lightness < $avg-lightness {
+      $color-value: variable(background);
+    } @else {
+      $color-value: variable(foreground);
+    }
+  }
+
+  @return $color-value;
+}

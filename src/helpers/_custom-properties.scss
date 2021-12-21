@@ -1,0 +1,102 @@
+@import "../modules/settings/function";
+@import "../modules/default/function";
+@import "../modules/color/function";
+@import "../helpers/case";
+
+/// Custom Properties mixin
+// --------------------------
+/// Create custom properties from map
+///
+/// @access public
+/// @group case utilities
+/// @param {map} $group
+/// @return {string}
+///
+@mixin customProperties($group) {
+  $prefix: map-get($settings, "prefix");
+
+  @if $prefix != "" {
+    $prefix: "#{$prefix}-";
+  }
+
+  @each $name, $value in $group {
+    @if $value == "" {
+      $value: '""';
+    }
+
+    --#{$prefix}#{camelCaseToKebabCase($name)}: #{$value};
+  }
+}
+
+@function get-variable-value($var, $default) {
+  @if has-default($var) and $default == "" {
+    $default: get-default($var);
+  } @else if
+    type-of($default) ==
+    "string" and
+    $default !=
+    "" and
+    isCamelCase($default)
+  {
+    $default: variable($default);
+  }
+
+  @return $default;
+}
+
+@function variable-value($default) {
+  @return get-variable-value("", $default);
+}
+
+@function variable-name($var) {
+  $prefix: map-get($settings, "prefix");
+
+  @if $prefix != "" {
+    $prefix: "#{$prefix}-";
+  }
+
+  $variable: "--#{$prefix}#{camelCaseToKebabCase($var)}";
+
+  @return $variable;
+}
+
+@function variable($var, $default: "") {
+  $variable: variable-name($var);
+  $default: get-variable-value($var, $default);
+
+  @if $default != "" {
+    @return var(#{$variable}, $default);
+  } @else {
+    @return #{$var};
+  }
+}
+
+@function isPropertyList($value) {
+  @if type-of($value) == "map" {
+    @return true;
+  } @else {
+    @return false;
+  }
+}
+@function isVariabled($property) {
+  @return list-contains($variabled, $property);
+}
+
+@mixin property($args...) {
+  @each $arg in $args {
+    $module: &;
+
+    @if isPropertyList($arg) {
+      @each $property in $arg {
+        $prop: nth($property, 1);
+        $value: nth($property, 2);
+
+        @if isVariabled($prop) {
+          #{$prop}: variable("#{$module}#{letter-uppercase($prop)}", $value);
+        } @else {
+          #{$prop}: #{$value};
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+@import "../src/use.scss";
+
+.something {
+  @include property(
+    (
+      "padding": 10px,
+      "left": 0,
+      "top": 0,
+      "position": absolute,
+      "background": red,
+    )
+  );
+  &__element {
+    @include property(
+      (
+        "background-color": foreground,
+        "color": background,
+        padding: 0,
+      )
+    );
+  }
+}

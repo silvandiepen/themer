@@ -1,0 +1,20 @@
+@function has-default($key) {
+  @if has-typography($key) or has-color($key) or has-setting($key) {
+    @return true;
+  }
+  @return false;
+}
+@function get-default($key) {
+  @if has-default($key) {
+    @if has-setting($key) {
+      @return get-setting($key);
+    }
+    @if has-color($key) {
+      @return get-color($key);
+    }
+    @if has-typography($key) {
+      @return "#{get-typography($key)}";
+    }
+  }
+  @return "";
+}

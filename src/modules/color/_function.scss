@@ -1,0 +1,21 @@
+@function has-color($key) {
+  @if type-of($colors) == "map" {
+    @return map-has-key($colors, $key);
+  } @else {
+    @warn "colors is not a map but: #{type-of($colors)}";
+    @return false;
+  }
+}
+
+@function get-color($key) {
+  @if type-of($colors) == "map" {
+    @if map-has-key($colors, $key) {
+      @return map-get($colors, $key);
+    } @else {
+      @warn "#{$key} does not exist in colors";
+    }
+  } @else {
+    @warn "colors is not a map but: #{type-of($colors)}";
+    @return false;
+  }
+}
