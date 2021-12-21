@@ -4,7 +4,8 @@
   "description": "Sass Variable Theming",
   "main": "src/index.scss",
   "exports": {
-    "./use": "./src/use.scss"
+    "./use": "./src/use.scss",
+    "./app": "./src/index.scss"
   },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
