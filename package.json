@@ -2,7 +2,10 @@
   "name": "@sil/themer",
   "version": "0.0.1",
   "description": "Sass Variable Theming",
-  "main": "index.js",
+  "main": "src/index.scss",
+  "exports": {
+    "./use": "./src/use.scss"
+  },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
     "build:app": "sass test/app.scss dist/app.css",
