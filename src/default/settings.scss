@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Default theme settings
 $settings: (
   prefix: "",
@@ -6,3 +8,9 @@ $settings: (
   space: 1em,
   transition: 0.3s ease-in-out,
 ) !default;
+
+// Define empty customisable map for theme
+$theme-settings: () !default;
+
+// Merge theme settings with custom settings
+$settings: map.merge($settings, $theme-settings) !global;

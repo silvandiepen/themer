@@ -1,3 +1,7 @@
+$theme-settings: (
+  prefix: "test",
+);
+
 @import "../src/use.scss";
 
 .something {
@@ -18,5 +22,21 @@
         padding: 0,
       )
     );
+    &:hover {
+      @include property(
+        (
+          transform: scale(0.5),
+          background-color: foreground75,
+        )
+      );
+    }
+    &:focus {
+      @include property(
+        (
+          transform: scale(0.6),
+          background-color: foreground75,
+        )
+      );
+    }
   }
 }

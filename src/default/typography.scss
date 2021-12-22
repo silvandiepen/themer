@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Default theme typography
 $typography: (
   primaryFontFamily: (
@@ -21,3 +23,9 @@ $typography: (
   bold: 600,
   heavy: 900,
 ) !default;
+
+// Define empty customisable map for theme
+$theme-typography: () !default;
+
+// Merge theme typography with custom typography
+$typgraphy: map.merge($typography, $theme-typography);

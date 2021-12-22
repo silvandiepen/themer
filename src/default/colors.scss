@@ -1,3 +1,4 @@
+@use "sass:map";
 // Default theme settings
 $colors: (
   background: #ffffff,
@@ -11,3 +12,11 @@ $colors: (
   info: #7abffc,
   success: #54d577,
 ) !default;
+
+// Define empty customisable map for colors
+$theme-colors: () !default;
+
+// Merge theme colors with custom colors
+$colors: map.merge($colors, $theme-colors) !global;
+$colors: addShades($colors, (75, 50, 25, 10)) !global;
+$colors: addTextColor($colors) !global;

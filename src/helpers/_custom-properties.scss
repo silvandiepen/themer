@@ -1,7 +1,31 @@
-@import "../modules/settings/function";
-@import "../modules/default/function";
-@import "../modules/color/function";
+@use "sass:map";
+
 @import "../helpers/case";
+
+$prefix: null;
+$cached-variables: ();
+
+/// init Prefix Properties mixin
+// --------------------------
+/// Initialize and set the prefix for the project
+///
+/// @access public
+/// @group cached utilities
+/// @param {}
+/// @return {void}
+///
+@mixin initPrefix() {
+  @if $prefix == null {
+    $prefix-value: map.get($settings, "prefix");
+
+    @if $prefix-value {
+      $prefix: "#{$prefix-value}-" !global;
+    } @else {
+      $prefix: "" !global;
+    }
+  }
+}
+@include initPrefix();
 
 /// Custom Properties mixin
 // --------------------------
@@ -13,12 +37,6 @@
 /// @return {string}
 ///
 @mixin customProperties($group) {
-  $prefix: map-get($settings, "prefix");
-
-  @if $prefix != "" {
-    $prefix: "#{$prefix}-";
-  }
-
   @each $name, $value in $group {
     @if $value == "" {
       $value: '""';
@@ -28,9 +46,40 @@
   }
 }
 
+/// Set Variable Cached
+// --------------------------
+/// Adds a key with value to the cached variables
+///
+/// @access public
+/// @group cached utilities
+/// @param {key: string, value: string}
+/// @return {map}
+///
+
+@function set-variable-cached($key, $value) {
+  //  Directly return cached variables when the key is a class
+  @if str-contains($key, ".") {
+    @return $cached-variables;
+  }
+  @return map.set($cached-variables, $key, $value);
+}
+
+/// Get Variable Value
+// --------------------------
+/// Gets the value of a variable if it has a default
+///
+/// @access public
+/// @group variable utilities
+/// @param {var: string, default: string}
+/// @return {string}
+///
+
 @function get-variable-value($var, $default) {
-  @if has-default($var) and $default == "" {
+  @if map.get($cached-variables, $var) {
+    $default: map.get($cached-variables, $var);
+  } @else if has-default($var) and $default == "" {
     $default: get-default($var);
+    $cached-variables: set-variable-cached($var, $default) !global;
   } @else if
     type-of($default) ==
     "string" and
@@ -39,64 +88,67 @@
     isCamelCase($default)
   {
     $default: variable($default);
+    $cached-variables: set-variable-cached($var, $default) !global;
   }
 
   @return $default;
 }
 
-@function variable-value($default) {
-  @return get-variable-value("", $default);
-}
+/// Variable Name
+// --------------------------
+/// Creates the variable name
+///
+/// @access public
+/// @group variable utilities
+/// @param {var: string}
+/// @return {string}
+///
 
 @function variable-name($var) {
-  $prefix: map-get($settings, "prefix");
-
-  @if $prefix != "" {
-    $prefix: "#{$prefix}-";
-  }
-
   $variable: "--#{$prefix}#{camelCaseToKebabCase($var)}";
 
   @return $variable;
 }
 
+/// Variable
+// --------------------------
+/// Main function to create a variable, based on it parent and automatically adds defaults
+///
+/// @access public
+/// @group variable utilities
+/// @param {var: string, default: string}
+/// @return {string}
+///
+
 @function variable($var, $default: "") {
+  // Key to save direct responses
+  $cached-key: "#{$var}+#{$default}";
+
+  // Check if the value exists in cache and return if true.
+  $cached-value: map.get($cached-defaults, $cached-key);
+  @if $cached-value {
+    @return $cached-value;
+  }
+
+  // Create variable name
   $variable: variable-name($var);
-  $default: get-variable-value($var, $default);
 
+  $cached-var-value: map.get($cached-defaults, $var);
+  @if $cached-var-value {
+    $default: $cached-var-value;
+  } @else {
+    $default: get-variable-value($var, $default);
+  }
+
+  // Return
+  $returnValue: "";
   @if $default != "" {
-    @return var(#{$variable}, $default);
+    $returnValue: var(#{$variable}, $default);
   } @else {
-    @return #{$var};
+    $returnValue: #{$var};
   }
-}
 
-@function isPropertyList($value) {
-  @if type-of($value) == "map" {
-    @return true;
-  } @else {
-    @return false;
-  }
-}
-@function isVariabled($property) {
-  @return list-contains($variabled, $property);
-}
+  $cached-variables: set-variable-cached($cached-key, $returnValue) !global;
 
-@mixin property($args...) {
-  @each $arg in $args {
-    $module: &;
-
-    @if isPropertyList($arg) {
-      @each $property in $arg {
-        $prop: nth($property, 1);
-        $value: nth($property, 2);
-
-        @if isVariabled($prop) {
-          #{$prop}: variable("#{$module}#{letter-uppercase($prop)}", $value);
-        } @else {
-          #{$prop}: #{$value};
-        }
-      }
-    }
-  }
+  @return $returnValue;
 }

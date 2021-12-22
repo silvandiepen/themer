@@ -1,9 +1,0 @@
-@import "_function.scss";
-
-// Define empty customisable map for colors
-$theme-colors: () !default;
-
-// Merge theme colors with custom colors
-$colors: map-merge($colors, $theme-colors);
-$colors: addShades($colors, (75, 50, 25, 10));
-$colors: addTextColor($colors);

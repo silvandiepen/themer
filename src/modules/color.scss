@@ -1,10 +1,33 @@
+@use "sass:map";
 @use "sass:math";
+
+@function has-color($key) {
+  @if type-of($colors) == "map" {
+    @return map-has-key($colors, $key);
+  } @else {
+    @warn "colors is not a map but: #{type-of($colors)}";
+    @return false;
+  }
+}
+
+@function get-color($key) {
+  @if type-of($colors) == "map" {
+    @if map-has-key($colors, $key) {
+      @return map-get($colors, $key);
+    } @else {
+      @warn "#{$key} does not exist in colors";
+    }
+  } @else {
+    @warn "colors is not a map but: #{type-of($colors)}";
+    @return false;
+  }
+}
 
 @function addShades($colors, $shades: ()) {
   $mix-color: get-color("background");
 
   @each $color-name, $color-value in $colors {
-    $colors: map-merge(
+    $colors: map.merge(
       $colors,
       (
         $color-name: $color-value,
@@ -25,7 +48,7 @@
           "#{$color-name}#{$shade}": $newColor,
         );
 
-        $colors: map-merge($colors, $clr);
+        $colors: map.merge($colors, $clr);
       }
     }
   }
@@ -34,7 +57,7 @@
 
 @function addTextColor($colors) {
   @each $color-name, $color-value in $colors {
-    $colors: map-set($colors, "#{$color-name}Text", getTextColor($color-value));
+    $colors: map.set($colors, "#{$color-name}Text", getTextColor($color-value));
   }
 
   @return $colors;
@@ -49,15 +72,15 @@
 
   @if $bg-lightness < $fg-lightness {
     @if $lightness < $avg-lightness {
-      $color-value: variable(foreground);
+      $color-value: #{variable(foreground)};
     } @else {
-      $color-value: variable(background);
+      $color-value: #{variable(background)};
     }
   } @else {
     @if $lightness < $avg-lightness {
-      $color-value: variable(background);
+      $color-value: #{variable(background)};
     } @else {
-      $color-value: variable(foreground);
+      $color-value: #{variable(foreground)};
     }
   }
 
