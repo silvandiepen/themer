@@ -18,5 +18,5 @@ $theme-colors: () !default;
 
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
-$colors: addShades($colors, (75, 50, 25, 10)) !global;
+$colors: addShades($colors, (10, 25, 50, 75, 90)) !global;
 $colors: addTextColor($colors) !global;

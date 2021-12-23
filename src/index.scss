@@ -8,13 +8,13 @@
 	*/
   @include customProperties($settings);
 
-  /*
-		Theme Colors
-	*/
+  // /*
+  // 	Theme Colors
+  // */
   @include customProperties($colors);
 
-  /*
-		Theme Typography
-	*/
+  // /*
+  // 	Theme Typography
+  // */
   @include customProperties($typography);
 }

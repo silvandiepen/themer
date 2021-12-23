@@ -1,6 +1,16 @@
 @use "sass:map";
 @use "sass:math";
 
+$cache-bg: null;
+$cache-fg: null;
+$cache-bg-var: null;
+$cache-fg-var: null;
+$cache-bg-light: null;
+$cache-fg-light: null;
+$cache-avg-light: null;
+$darkmode: null;
+$mix-color: null;
+
 @function has-color($key) {
   @if type-of($colors) == "map" {
     @return map-has-key($colors, $key);
@@ -22,65 +32,91 @@
     @return false;
   }
 }
+@function getMixColor($color) {
+  @if $cache-bg == null {
+    $cache-bg: get-color("background") !global;
+  }
+  @if $cache-fg == null {
+    $cache-fg: get-color("foreground") !global;
+  }
+  @if $cache-bg == $color {
+    @return $cache-fg;
+  } @else {
+    @return $cache-bg;
+  }
+}
 
 @function addShades($colors, $shades: ()) {
-  $mix-color: get-color("background");
+  $shade-colors: ();
 
   @each $color-name, $color-value in $colors {
-    $colors: map.merge(
-      $colors,
-      (
-        $color-name: $color-value,
-      )
-    );
-
-    $normal: mix($color-value, $mix-color, 50) != $mix-color;
-
-    @if not $normal {
-      $mix-color: #e4e5ef;
-    }
-
     @if length($shades) > 0 {
       @each $shade in $shades {
-        $newColor: mix($color-value, $mix-color, $shade);
-
-        $clr: (
-          "#{$color-name}#{$shade}": $newColor,
+        $shade-colors: map.set(
+          $shade-colors,
+          "#{$color-name}#{$shade}",
+          mix($color-value, getMixColor($color-value), $shade)
         );
-
-        $colors: map.merge($colors, $clr);
       }
     }
   }
-  @return $colors;
+
+  @return map.merge($colors, $shade-colors);
 }
 
 @function addTextColor($colors) {
+  $text-colors: ();
   @each $color-name, $color-value in $colors {
-    $colors: map.set($colors, "#{$color-name}Text", getTextColor($color-value));
+    $text-colors: map.set(
+      $text-colors,
+      "#{$color-name}Text",
+      getTextColor($color-value)
+    );
   }
-
-  @return $colors;
+  @return map.merge($colors, $text-colors);
 }
 
 @function getTextColor($color-value) {
-  $bg-lightness: lightness(get-color("background"));
-  $fg-lightness: lightness(get-color("foreground"));
-  $avg-lightness: math.div(($bg-lightness + $fg-lightness), 2);
+  @if $cache-bg == null {
+    $cache-bg: get-color("background") !global;
+  }
+  @if $cache-fg == null {
+    $cache-fg: get-color("foreground") !global;
+  }
+  @if $cache-bg-var == null {
+    $cache-bg-var: #{variable(background)} !global;
+  }
+  @if $cache-bg-light == null {
+    $cache-bg-light: lightness($cache-bg) !global;
+  }
+  @if $cache-fg-light == null {
+    $cache-fg-light: lightness($cache-fg) !global;
+  }
+  @if $cache-fg-var == null {
+    $cache-fg-var: #{variable(foreground)} !global;
+  }
+
+  @if $cache-avg-light == null {
+    $cache-avg-light: math.div(($cache-bg-light + $cache-fg-light), 2) !global;
+  }
+
+  @if $darkmode == null {
+    $darkmode: ($cache-bg-light > $cache-fg-light) !global;
+  }
 
   $lightness: lightness($color-value);
 
-  @if $bg-lightness < $fg-lightness {
-    @if $lightness < $avg-lightness {
-      $color-value: #{variable(foreground)};
+  @if $darkmode {
+    @if $lightness < $cache-avg-light {
+      $color-value: $cache-bg-var;
     } @else {
-      $color-value: #{variable(background)};
+      $color-value: $cache-fg-var;
     }
   } @else {
-    @if $lightness < $avg-lightness {
-      $color-value: #{variable(background)};
+    @if $lightness < $cache-avg-light {
+      $color-value: $cache-fg-var;
     } @else {
-      $color-value: #{variable(foreground)};
+      $color-value: $cache-bg-var;
     }
   }
 

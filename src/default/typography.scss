@@ -15,13 +15,13 @@ $typography: (
     "Segoe UI Symbol",
   ),
   secondaryFontFamily: "times",
-  base: 16px,
-  thin: 100,
-  light: 300,
-  normal: 400,
-  medium: 500,
-  bold: 600,
-  heavy: 900,
+  base-size: 16px,
+  thin-weight: 100,
+  light-weight: 300,
+  normal-weight: 400,
+  medium-weight: 500,
+  bold-weight: 600,
+  heavy-weight: 900,
 ) !default;
 
 // Define empty customisable map for theme

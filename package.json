@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
+    "build:js": "node build/compile.js",
     "build:app": "sass test/app.scss dist/app.css",
     "build:style": "sass test/style.scss dist/style.css",
     "test": "echo \"Error: no test specified\" && exit 1"

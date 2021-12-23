@@ -1,4 +1,4 @@
-/// Has lowercase function
+/// Has lower case function
 // --------------------------
 /// Check if a string has any lowercase character
 ///
@@ -8,17 +8,42 @@
 /// @return {boolean}
 ///
 
-@function has-lowercase($str) {
+$lowercase-letters: null;
+
+@function has-lower-case($str) {
   $hasLowerCaseLetter: false;
   $letterList: to-letter-list($str);
-  $lowercase: list-to-str(character-set("a-z"), "");
 
-  @for $i from 1 through length($letterList) {
-    @if str-contains($lowercase, nth($letterList, $i)) {
-      $hasLowerCaseLetter: true;
+  @each $char in $letterList {
+    @if is-lowercase($char) {
+      $hasLowerCaseLetter: true !global;
     }
   }
   @return $hasLowerCaseLetter;
+}
+
+@function is-lower-case($char) {
+  $isLowerCaseLetter: false;
+  @if $lowercase-letters == null {
+    $lowercase-letters: list-to-str(character-set("a-z"), "") !global;
+  }
+  @if str-contains($lowercase-letters, $char) {
+    $isLowerCaseLetter: true;
+  }
+  @return $isLowerCaseLetter;
+}
+
+@function is-letter($char) {
+  $isLetter: false;
+  @if $lowercase-letters == null {
+    $lowercase-letters: list-to-str(character-set("a-z"), "") !global;
+  }
+
+  @if str-contains($lowercase-letters, to-lower-case($char)) {
+    $isLetter: true;
+  }
+
+  @return $isLetter;
 }
 
 /// Kebab Case function
@@ -51,19 +76,16 @@
 ///
 @function sentenceCase($str) {
   $letterList: to-letter-list($str);
-  $new-list: ();
+  $new-str: "";
 
-  @for $i from 1 through length($letterList) {
-    $char: nth($letterList, $i);
-
-    @if has-lowercase($char) or is-number($char) {
-      $new-list: append($new-list, $char);
+  @each $char in $letterList {
+    @if is-lower-case($char) or is-number($char) {
+      $new-str: "#{$new-str}#{$char}";
     } @else {
-      $new-list: append($new-list, " #{to-lower-case($char)}");
+      $new-str: "#{$new-str} #{$char}";
     }
   }
-
-  @return trim(list-to-str($new-list, ""));
+  @return trim($new-str);
 }
 
 @function cleanupBem($str) {

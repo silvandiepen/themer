@@ -41,7 +41,6 @@ $cached-variables: ();
     @if $value == "" {
       $value: '""';
     }
-
     --#{$prefix}#{camelCaseToKebabCase($name)}: #{$value};
   }
 }
