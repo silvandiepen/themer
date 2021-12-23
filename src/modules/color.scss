@@ -76,6 +76,20 @@ $mix-color: null;
   @return map.merge($colors, $text-colors);
 }
 
+@function text-contrast($color, $dark: black, $light: white) {
+  $brightness: round(
+    (red($color) * 299)+ (green($color) * 587) + math.div((blue($color) * 114), 1000)
+  );
+  $whiteness: round(
+    (red(#ffffff) * 299)+ (green(#ffffff) * 587) + math.div((blue(#ffffff) * 114), 1000)
+  );
+  @if abs($brightness) < math.div($whiteness, 2) {
+    @return $dark;
+  } @else {
+    @return $light;
+  }
+}
+
 @function getTextColor($color-value) {
   @if $cache-bg == null {
     $cache-bg: get-color("background") !global;
@@ -104,21 +118,15 @@ $mix-color: null;
     $darkmode: ($cache-bg-light > $cache-fg-light) !global;
   }
 
-  $lightness: lightness($color-value);
+  $light: $cache-bg;
+  $dark: $cache-fg;
 
   @if $darkmode {
-    @if $lightness < $cache-avg-light {
-      $color-value: $cache-bg-var;
-    } @else {
-      $color-value: $cache-fg-var;
-    }
-  } @else {
-    @if $lightness < $cache-avg-light {
-      $color-value: $cache-fg-var;
-    } @else {
-      $color-value: $cache-bg-var;
-    }
+    $light: $cache-fg;
+    $dark: $cache-bg;
   }
+
+  $color-value: text-contrast($color-value, $dark, $light);
 
   @return $color-value;
 }
