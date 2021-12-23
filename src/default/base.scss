@@ -1,0 +1,15 @@
+@use "sass:map";
+
+// Default theme base
+$base: (
+  borderRadius: 1em,
+  shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.1),
+  space: 1em,
+  transition: 0.3s ease-in-out,
+) !default;
+
+// Define empty customisable map for theme
+$theme-base: () !default;
+
+// Merge theme base with custom base
+$base: map.merge($base, $theme-base) !global;

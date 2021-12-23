@@ -1,0 +1,28 @@
+$theme-settings: (
+  prefix: "test",
+);
+
+@import "../src/use.scss";
+
+.something {
+  padding: 10px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  background: red;
+
+  &__element {
+    background-color: variable(foreground);
+    color: variable(background);
+    padding: 0;
+
+    &:hover {
+      transform: scale(0.5);
+      background-color: variable(foreground75);
+    }
+    &:focus {
+      transform: scale(0.6);
+      background-color: variable(foreground75);
+    }
+  }
+}

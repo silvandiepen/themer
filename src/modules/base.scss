@@ -1,0 +1,12 @@
+@use "sass:map";
+
+@function has-base($key) {
+  @return map.has-key($base, $key);
+}
+@function get-base($key) {
+  @if has-base($key) {
+    @return map.get($base, $key);
+  } @else {
+    @warn "#{$key} does not exist in base";
+  }
+}

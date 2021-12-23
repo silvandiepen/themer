@@ -1,20 +1,25 @@
+@use "sass:map";
 @import "./default/index";
 @import "./modules/index";
 @import "./helpers/index";
 
 :root {
   /*
-		Theme Settings
+		Theme Base
 	*/
-  @include customProperties($settings);
-
+  @if map.get($settings, "properties", "base") {
+    @include customProperties($base);
+  }
   // /*
   // 	Theme Colors
   // */
-  @include customProperties($colors);
-
+  @if map.get($settings, "properties", "colors") {
+    @include customProperties($colors);
+  }
   // /*
   // 	Theme Typography
   // */
-  @include customProperties($typography);
+  @if map.get($settings, "properties", "typography") {
+    @include customProperties($typography);
+  }
 }

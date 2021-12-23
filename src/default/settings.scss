@@ -3,14 +3,28 @@
 // Default theme settings
 $settings: (
   prefix: "",
-  borderRadius: 1em,
-  shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1),
-  space: 1em,
-  transition: 0.3s ease-in-out,
+  properties: (
+    base: true,
+    typography: true,
+    colors: true,
+  ),
+  colors: (
+    shadeSteps: (
+      10,
+      25,
+      50,
+      75,
+      90,
+    ),
+    shades: true,
+    text: true,
+  ),
 ) !default;
 
 // Define empty customisable map for theme
 $theme-settings: () !default;
 
 // Merge theme settings with custom settings
-$settings: map.merge($settings, $theme-settings) !global;
+$settings: map.deep-merge($settings, $theme-settings) !global;
+
+@debug $settings;
