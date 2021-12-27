@@ -1,6 +1,6 @@
 {
   "name": "@sil/themer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Sass Variable Theming",
   "main": "src/index.scss",
   "exports": {
