@@ -10,15 +10,15 @@
   @if map.get($settings, "properties", "base") {
     @include customProperties($base);
   }
-  // /*
-  // 	Theme Colors
-  // */
+  /*
+  	Theme Colors
+  */
   @if map.get($settings, "properties", "colors") {
     @include customProperties($colors);
   }
-  // /*
-  // 	Theme Typography
-  // */
+  /*
+  	Theme Typography
+  */
   @if map.get($settings, "properties", "typography") {
     @include customProperties($typography);
   }
