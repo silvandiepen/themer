@@ -13,7 +13,7 @@ $mix-color: null;
 
 @function has-color($key) {
   @if type-of($colors) == "map" {
-    @return map-has-key($colors, $key);
+    @return map.has-key($colors, $key);
   } @else {
     @warn "colors is not a map but: #{type-of($colors)}";
     @return false;
@@ -22,8 +22,8 @@ $mix-color: null;
 
 @function get-color($key) {
   @if type-of($colors) == "map" {
-    @if map-has-key($colors, $key) {
-      @return map-get($colors, $key);
+    @if map.has-key($colors, $key) {
+      @return map.get($colors, $key);
     } @else {
       @warn "#{$key} does not exist in colors";
     }
@@ -98,7 +98,8 @@ $mix-color: null;
     $cache-fg: get-color("foreground") !global;
   }
   @if $cache-bg-var == null {
-    $cache-bg-var: #{variable(background)} !global;
+    $cache-bg-var: black !global;
+    // $cache-bg-var: #{variable(background)} !global;
   }
   @if $cache-bg-light == null {
     $cache-bg-light: lightness($cache-bg) !global;
@@ -107,7 +108,8 @@ $mix-color: null;
     $cache-fg-light: lightness($cache-fg) !global;
   }
   @if $cache-fg-var == null {
-    $cache-fg-var: #{variable(foreground)} !global;
+    $cache-bg-var: white !global;
+    // $cache-fg-var: #{variable(foreground)} !global;
   }
 
   @if $cache-avg-light == null {
