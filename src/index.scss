@@ -2,6 +2,28 @@
 @import "./default/index";
 @import "./modules/index";
 
+/*
+  	Theme Colors
+  */
+@if map.get($settings, "properties", "colors") {
+  @if map.get($settings, "colors", colorModes) {
+    @media (prefers-color-scheme: dark) {
+      :root {
+        @include customProperties($darkmode-colors);
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        @include customProperties($lightmode-colors);
+      }
+    }
+  } @else {
+    :root {
+      @include customProperties($colors);
+    }
+  }
+}
+
 :root {
   /*
 		Theme Base
@@ -9,12 +31,7 @@
   @if map.get($settings, "properties", "base") {
     @include customProperties($base);
   }
-  /*
-  	Theme Colors
-  */
-  @if map.get($settings, "properties", "colors") {
-    @include customProperties($colors);
-  }
+
   /*
   	Theme Typography
   */

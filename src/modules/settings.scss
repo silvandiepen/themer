@@ -8,5 +8,6 @@
     @return map.get($settings, $key);
   } @else {
     @warn "#{$key} does not exist in settings";
+    @return false;
   }
 }

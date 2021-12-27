@@ -6,5 +6,6 @@
     @return map-get($typography, $key);
   } @else {
     @warn "#{$key} does not exist in typography";
+    @return false;
   }
 }

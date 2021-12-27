@@ -18,9 +18,31 @@ $theme-colors: () !default;
 
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
-@if map.get($settings, "colors", "shades") {
-  $colors: addShades($colors, map.get($settings, colors, shadeSteps)) !global;
-}
-@if map.get($settings, "colors", "text") {
-  $colors: addTextColor($colors) !global;
+
+$darkmode-colors: $colors;
+$lightmode-colors: $colors;
+
+@if map.get($settings, "colors", colorModes) or
+  map.get($settings, "colors", generateColorModes)
+{
+  $darkmode-colors: toMode("dark", $colors) !global;
+  $lightmode-colors: toMode("light", $colors) !global;
+
+  @if map.get($settings, "colors", "shades") {
+    $steps: map.get($settings, colors, shadeSteps);
+
+    $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
+    $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+  }
+  @if map.get($settings, "colors", "text") {
+    $darkmode-colors: addTextColor($darkmode-colors) !global;
+    $lightmode-colors: addTextColor($lightmode-colors) !global;
+  }
+} @else {
+  @if map.get($settings, "colors", "shades") {
+    $colors: addShades($colors, map.get($settings, colors, shadeSteps)) !global;
+  }
+  @if map.get($settings, "colors", "text") {
+    $colors: addTextColor($colors) !global;
+  }
 }

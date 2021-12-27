@@ -9,6 +9,8 @@ $settings: (
     colors: true,
   ),
   colors: (
+    colorModes: true,
+    generateColorModes: false,
     shadeSteps: (
       10,
       25,
