@@ -302,9 +302,6 @@
 ///
 
 @function trim($str) {
-  @if str-slice($str, 1, 1) == "" {
-    @debug "there is a empty thingy here";
-  }
   @if str-slice($str, 1, 1) == " " {
     @return trim(str-slice($str, 2, str-length($str)));
   } @else if str-slice($str, str-length($str), str-length($str)) == " " {
