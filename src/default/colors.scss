@@ -22,6 +22,7 @@ $colors: map.merge($colors, $theme-colors) !global;
 $darkmode-colors: $colors;
 $lightmode-colors: $colors;
 
+// Generate Colors per Color Mode
 @if map.get($settings, "colors", colorModes) or
   map.get($settings, "colors", generateColorModes)
 {
@@ -38,11 +39,15 @@ $lightmode-colors: $colors;
     $darkmode-colors: addTextColor($darkmode-colors) !global;
     $lightmode-colors: addTextColor($lightmode-colors) !global;
   }
-} @else {
-  @if map.get($settings, "colors", "shades") {
-    $colors: addShades($colors, map.get($settings, colors, shadeSteps)) !global;
-  }
-  @if map.get($settings, "colors", "text") {
-    $colors: addTextColor($colors) !global;
-  }
 }
+
+// Generate all base colors and shades.
+@if map.get($settings, "colors", "shades") {
+  $colors: addShades($colors, map.get($settings, colors, shadeSteps)) !global;
+}
+@if map.get($settings, "colors", "text") {
+  $colors: addTextColor($colors) !global;
+}
+
+// Add all shades to the cached defaults.
+$cached-defaults: map.merge($cached-defaults, $colors) !global;

@@ -82,7 +82,7 @@ $lowercase-letters: null;
     @if is-lower-case($char) or is-number($char) {
       $new-str: "#{$new-str}#{$char}";
     } @else {
-      $new-str: "#{$new-str} #{$char}";
+      $new-str: "#{$new-str} #{trim($char)}";
     }
   }
   @return trim($new-str);

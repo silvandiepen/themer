@@ -1,3 +1,5 @@
+@use "sass:list";
+
 /// is Property List
 // --------------------------
 /// Is the value given a property list?
@@ -40,17 +42,44 @@
 /// @return {properties}
 ///
 
-@mixin property($args...) {
-  @each $arg in $args {
-    $module: &;
+@function get-last-property($list) {
+  $l: list-to-str($list, " ");
+  @return nth($l, list-length($l));
+}
 
+@function cleanup-path($path) {
+  $path: simple-to-string($path, " ");
+  $p: "";
+
+  @if type-of($path) == "list" {
+    $p-list: ();
+    @each $part in $path {
+      $p-list: list.append($p-list, str-replace($part, ".", ""));
+    }
+    $p: simple-to-string($p-list, " ");
+  } @else {
+    $p: str-replace($path, ".", "");
+  }
+  @return $p;
+}
+
+@mixin property($args...) {
+  $m: &;
+
+  @if not list-contains($args, "use-path") {
+    $m: get-last-property($m);
+  }
+
+  $m: cleanup-path($m);
+
+  @each $arg in $args {
     @if is-property-list($arg) {
       @each $property in $arg {
         $prop: nth($property, 1);
         $value: nth($property, 2);
 
         @if is-themable($prop) {
-          #{$prop}: variable("#{$module}#{letter-uppercase($prop)}", $value);
+          #{$prop}: variable("#{$m}#{letter-uppercase($prop)}", $value);
         } @else {
           #{$prop}: #{$value};
         }

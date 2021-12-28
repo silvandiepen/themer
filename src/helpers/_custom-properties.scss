@@ -125,6 +125,7 @@ $cached-variables: ();
 
   // Check if the value exists in cache and return if true.
   $cached-value: map.get($cached-defaults, $cached-key);
+
   @if $cached-value {
     @return $cached-value;
   }
@@ -133,11 +134,8 @@ $cached-variables: ();
   $variable: variable-name($var);
 
   $cached-var-value: map.get($cached-defaults, $var);
-  @if $cached-var-value {
-    $default: $cached-var-value;
-  } @else {
-    $default: get-variable-value($var, $default);
-  }
+
+  $default: get-variable-value($var, $default);
 
   // Return
   $returnValue: "";

@@ -1,10 +1,10 @@
 $theme-settings: (
-  prefix: "test",
+  prefix: "breakfast",
 );
 
 @import "../src/use.scss";
 
-.something {
+.pancake {
   @include property(
     (
       "padding": 10px,
@@ -14,11 +14,11 @@ $theme-settings: (
       "background": red,
     )
   );
-  &__element {
+  &__honey {
     @include property(
       (
-        "background-color": foreground,
-        "color": background,
+        "background-color": foreground25,
+        "color": background25,
         padding: 0,
       )
     );
@@ -37,6 +37,33 @@ $theme-settings: (
           background-color: foreground75,
         )
       );
+    }
+  }
+}
+
+.plate {
+  .pancake {
+    @include property(
+      (
+        content: none,
+        background-color: background10,
+      )
+    );
+  }
+}
+
+.table {
+  .cloth {
+    .plate {
+      .pancake {
+        @include property(
+          (
+            content: none,
+            background-color: background10,
+          ),
+          use-path
+        );
+      }
     }
   }
 }

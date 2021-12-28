@@ -8,7 +8,7 @@
     $cached-defaults: map.merge($cached-defaults, $settings) !global;
   }
 
-  @return map-has-key($cached-defaults, $key);
+  @return map.has-key($cached-defaults, $key);
 }
 
 @function get-default($key) {
