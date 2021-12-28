@@ -28,3 +28,5 @@ $theme-settings: () !default;
 
 // Merge theme settings with custom settings
 $settings: map.deep-merge($settings, $theme-settings) !global;
+
+$cached-defaults: map.merge($cached-defaults, $settings) !global;

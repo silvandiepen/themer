@@ -28,4 +28,8 @@ $typography: (
 $theme-typography: () !default;
 
 // Merge theme typography with custom typography
-$typgraphy: map.merge($typography, $theme-typography);
+@each $key, $value in $theme-typography {
+  $typography: map.set($typography, $key, $value);
+}
+
+$cached-defaults: map.merge($cached-defaults, $typography) !global;

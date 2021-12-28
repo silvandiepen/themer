@@ -43,8 +43,7 @@
 ///
 
 @function get-last-property($list) {
-  $l: list-to-str($list, " ");
-  @return nth($l, list-length($l));
+  @return nth($list, length($list));
 }
 
 @function cleanup-path($path) {
