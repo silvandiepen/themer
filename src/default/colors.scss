@@ -23,29 +23,50 @@ $darkmode-colors: $colors;
 $lightmode-colors: $colors;
 
 // Generate Colors per Color Mode
-@if map.get($settings, "colors", colorModes) or
-  map.get($settings, "colors", generateColorModes)
-{
+
+$has-colors-colormodes: map.get($settings, "colors", "colorModes");
+$has-colors-generate: map.get($settings, "colors", "generateColorModes");
+$has-colors-shades: map.get($settings, "colors", "shades");
+$has-colors-opacity: map.get($settings, "colors", "opacity");
+$has-colors-text: map.get($settings, "colors", "text");
+$steps: map.get($settings, colors, shadeSteps);
+
+@if $has-colors-colormodes or $has-colors-generate {
   $darkmode-colors: toMode("dark", $colors) !global;
   $lightmode-colors: toMode("light", $colors) !global;
 
-  @if map.get($settings, "colors", "shades") {
-    $steps: map.get($settings, colors, shadeSteps);
-
-    $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
-    $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+  @if $has-colors-shades {
+    @if $has-colors-opacity {
+      $darkmode-colors: addOpacityShades(
+        $darkmode-colors,
+        $steps,
+        false
+      ) !global;
+      $lightmode-colors: addOpacityShades(
+        $lightmode-colors,
+        $steps,
+        false
+      ) !global;
+    } @else {
+      $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
+      $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+    }
   }
-  @if map.get($settings, "colors", "text") {
+  @if $has-colors-text {
     $darkmode-colors: addTextColor($darkmode-colors) !global;
     $lightmode-colors: addTextColor($lightmode-colors) !global;
   }
 }
 
 // Generate all base colors and shades.
-@if map.get($settings, "colors", "shades") {
-  $colors: addShades($colors, map.get($settings, colors, shadeSteps)) !global;
+@if $has-colors-shades {
+  @if $has-colors-opacity {
+    $colors: addOpacityShades($colors, $steps) !global;
+  } @else {
+    $colors: addShades($colors, $steps) !global;
+  }
 }
-@if map.get($settings, "colors", "text") {
+@if $has-colors-text {
   $colors: addTextColor($colors) !global;
 }
 

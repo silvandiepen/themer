@@ -65,6 +65,19 @@ $mix-color: null;
   }
 }
 
+@function addOpacityShades($shade-colors, $shades: (), $cached: true) {
+  $add-colors: ();
+  @each $name, $value in $shade-colors {
+    @if length($shades) > 0 {
+      @each $shade in $shades {
+        $color-name: "#{$name}#{$shade}";
+        $color-value: rgba($value, 0.01 * $shade);
+        $add-colors: map.set($add-colors, $color-name, $color-value);
+      }
+    }
+  }
+}
+
 @function addShades($shade-colors, $shades: (), $cached: true) {
   $add-colors: ();
 
