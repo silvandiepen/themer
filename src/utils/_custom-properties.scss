@@ -1,6 +1,6 @@
 @use "sass:map";
 
-@import "../helpers/case";
+// @import "../helpers/case";
 
 $prefix: null;
 $cached-variables: ();
@@ -18,7 +18,7 @@ $cached-variables: ();
   @if $prefix == null {
     $prefix-value: map.get($settings, "prefix");
 
-    @if $prefix-value {
+    @if $prefix-value != "" {
       $prefix: "#{$prefix-value}-" !global;
     } @else {
       $prefix: "" !global;
