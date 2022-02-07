@@ -1,18 +1,7 @@
 @use "sass:map";
-@import "./default/index";
+// @import "./default/index";
 
-body,
-html {
-  padding: 0;
-  margin: 0;
-  background-color: variable(background);
-  color: variable(foreground);
-  font-size: variable(baseSize);
-  font-family: variable(primaryFontFamily);
-}
-* {
-  box-sizing: border-box;
-}
+@import "./style/base.scss";
 @import "./style/reset.scss";
 
 /*

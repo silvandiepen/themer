@@ -76,6 +76,7 @@ $mix-color: null;
       }
     }
   }
+  @return map.merge($shade-colors, $add-colors);
 }
 
 @function addShades($shade-colors, $shades: (), $cached: true) {
