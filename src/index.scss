@@ -1,7 +1,7 @@
 @use "sass:map";
-// @import "./default/index";
-$settings: () !default;
 
+$settings: () !default;
+@import "./default/index";
 @import "./style/base.scss";
 @import "./style/reset.scss";
 
