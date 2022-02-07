@@ -1,5 +1,6 @@
 @use "sass:map";
 // @import "./default/index";
+$settings: () !default;
 
 @import "./style/base.scss";
 @import "./style/reset.scss";
@@ -26,18 +27,20 @@
   }
 }
 
-:root {
-  /*
+/*
 		Theme Base
 	*/
-  @if map.get($settings, "properties", "base") {
+@if map.get($settings, "properties", "base") {
+  :root {
     @include customProperties($base);
   }
+}
 
-  /*
+/*
   	Theme Typography
   */
-  @if map.get($settings, "properties", "typography") {
+@if map.get($settings, "properties", "typography") {
+  :root {
     @include customProperties($typography);
   }
 }
