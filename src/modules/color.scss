@@ -70,9 +70,11 @@ $mix-color: null;
   @each $name, $value in $shade-colors {
     @if length($shades) > 0 {
       @each $shade in $shades {
-        $color-name: "#{$name}#{$shade}";
-        $color-value: rgba($value, 0.01 * $shade);
-        $add-colors: map.set($add-colors, $color-name, $color-value);
+        @if $shade != null {
+          $color-name: "#{$name}#{$shade}";
+          $color-value: rgba($value, 0.01 * $shade);
+          $add-colors: map.set($add-colors, $color-name, $color-value);
+        }
       }
     }
   }
