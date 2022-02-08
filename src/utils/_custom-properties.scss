@@ -149,3 +149,8 @@ $cached-variables: ();
 
   @return $returnValue;
 }
+
+// Shortcut
+@function v($key, $value: "") {
+  @return variable($key, $value);
+}
