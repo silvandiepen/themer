@@ -66,5 +66,7 @@ $breakpoints: map-deep-get($settings, "breakpoints");
   }
 }
 @mixin bp($name, $target: "only") {
-  @include breakpoint($name, $target);
+  @include breakpoint($name, $target) {
+    @content;
+  }
 }
