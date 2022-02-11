@@ -1,9 +1,31 @@
 $theme-settings: (
-  prefix: "breakfast",
+  prefix: "food",
 );
 
 @import "../src/use.scss";
 
+.hamburger {
+  background: v(background);
+  color: v(foreground);
+  &__bread {
+    background: v(background);
+    color: v(foreground);
+  }
+  &__cheese {
+    /* Should be PRIMARY! */
+    background: v("background", primary25);
+  }
+  &__burger {
+    background: v(background);
+    color: v(foreground);
+  }
+  &__tomato {
+    border: v(border, background);
+  }
+  &__bun {
+    background: v(bgFill, background);
+  }
+}
 .pancake {
   @include property(
     (
@@ -12,12 +34,13 @@ $theme-settings: (
       "top": 0,
       "position": absolute,
       "background": red,
+      "color": foreground,
     )
   );
   &__honey {
     @include property(
       (
-        "background-color": foreground25,
+        "background-color": background25,
         "color": background25,
         padding: 0,
       )

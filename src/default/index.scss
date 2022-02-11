@@ -1,12 +1,10 @@
 $cached-defaults: ();
 
-@import "./settings.scss";
-@import "./typography.scss";
-@import "./base.scss";
-@import "./themable.scss";
-
-@import "../modules/default.scss";
-@import "../modules/color.scss";
-@import "../utils";
-
+@import "./settings";
+@import "./typography";
+@import "./base";
+@import "./themable";
 @import "./colors.scss";
+
+@import "../modules/default";
+@import "../utils";

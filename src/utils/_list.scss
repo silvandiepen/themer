@@ -1,3 +1,24 @@
+/// List merge function
+// --------------------------
+/// Adds all items from list 2 to list 1 without creating doubles.
+///
+/// @access public
+/// @group list utilities
+///
+/// @param {list} $list1
+/// @param {list} $list2
+///
+/// @return {list}
+///
+@function list-merge($list1, $list2) {
+  @each $item in $list2 {
+    @if not list-contains($list1, $item) {
+      $list1: append($list1, $item);
+    }
+  }
+  @return $list1;
+}
+
 /// String to List function
 // --------------------------
 /// Converts a string into a list breaking it apart by the `separator`
@@ -139,17 +160,22 @@
 ///
 
 @function list-to-str($list, $separator: ", ", $last: true) {
-  $string: nth($list, 1);
-  @if list-length($list) > 1 {
-    @for $i from 2 through list-length($list) {
-      $item: nth($list, $i);
-      @if $i == list-length($list) + 1 {
-        $string: #{$string}#{$item};
-      } @else {
-        $string: #{$string}#{$separator}#{$item};
+  $string: "";
+  @if list-length($list) > 0 {
+    $string: nth($list, 1);
+
+    @if list-length($list) > 1 {
+      @for $i from 2 through list-length($list) {
+        $item: nth($list, $i);
+        @if $i == list-length($list) + 1 {
+          $string: #{$string}#{$item};
+        } @else {
+          $string: #{$string}#{$separator}#{$item};
+        }
       }
     }
   }
+
   @return $string;
 }
 

@@ -1,4 +1,4 @@
-@use "sass:map"; // Cache
+@use "sass:map";
 
 @function has-default($key) {
   @if length($cached-defaults) < 1 {

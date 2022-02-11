@@ -1,6 +1,8 @@
 @use "sass:map";
 @use "sass:math";
 
+$colors: () !default;
+
 $cache-bg: null;
 $cache-fg: null;
 $cache-bg-var: null;
@@ -67,6 +69,7 @@ $mix-color: null;
 
 @function addOpacityShades($shade-colors, $shades: (), $cached: true) {
   $add-colors: ();
+
   @each $name, $value in $shade-colors {
     @if length($shades) > 0 {
       @each $shade in $shades {
@@ -78,6 +81,7 @@ $mix-color: null;
       }
     }
   }
+
   @return map.merge($shade-colors, $add-colors);
 }
 
@@ -164,10 +168,14 @@ $mix-color: null;
   @return $color-value;
 }
 
-@function toMode($mode, $colors) {
+@function toMode($mode, $clrs) {
   $mode-colors: ();
-  $bg-lightness: lightness(map.get($colors, "background"));
-  $fg-lightness: lightness(map.get($colors, "foreground"));
+
+  $bg: map.get($clrs, "background");
+  $fg: map.get($clrs, "foreground");
+
+  $bg-lightness: lightness($bg);
+  $fg-lightness: lightness($fg);
 
   @if $bg-lightness < $fg-lightness {
     $current: "dark";
@@ -175,13 +183,13 @@ $mix-color: null;
   $current: "light";
 
   @if $mode == $current {
-    @return $colors;
+    @return $clrs;
   } @else {
     @return map.merge(
-      $colors,
+      $clrs,
       (
-        background: map.get($colors, "foreground"),
-        foreground: map.get($colors, "background"),
+        background: $fg,
+        foreground: $bg,
       )
     );
   }

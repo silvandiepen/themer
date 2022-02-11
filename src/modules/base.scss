@@ -1,5 +1,7 @@
 @use "sass:map";
 
+$base: () !default;
+
 @function has-base($key) {
   @return map.has-key($base, $key);
 }

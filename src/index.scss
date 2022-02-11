@@ -1,6 +1,7 @@
 @use "sass:map";
 
-$settings: () !default;
+$app: true;
+
 @import "./default/index";
 @import "./style/base.scss";
 @import "./style/reset.scss";
@@ -8,6 +9,7 @@ $settings: () !default;
 /*
   	Theme Colors
   */
+
 @if map.get($settings, "properties", "colors") {
   @if map.get($settings, "colors", colorModes) {
     @media (prefers-color-scheme: dark) {
@@ -19,6 +21,12 @@ $settings: () !default;
       :root {
         @include customProperties($lightmode-colors);
       }
+    }
+    [color-mode="dark"] {
+      @include customProperties($darkmode-colors);
+    }
+    [color-mode="light"] {
+      @include customProperties($lightmode-colors);
     }
   } @else {
     :root {

@@ -75,15 +75,19 @@ $lowercase-letters: null;
 /// @return {string}
 ///
 @function sentenceCase($str) {
-  $letterList: to-letter-list($str);
   $new-str: "";
+  @if $str != null {
+    $letterList: to-letter-list($str);
 
-  @each $char in $letterList {
-    @if is-lower-case($char) or is-number($char) {
-      $new-str: "#{$new-str}#{$char}";
-    } @else {
-      $new-str: "#{$new-str} #{trim($char)}";
+    @each $char in $letterList {
+      @if is-lower-case($char) or is-number($char) {
+        $new-str: "#{$new-str}#{$char}";
+      } @else {
+        $new-str: "#{$new-str} #{trim($char)}";
+      }
     }
+  } @else {
+    @return $str;
   }
   @return trim($new-str);
 }

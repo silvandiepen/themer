@@ -1,10 +1,15 @@
 @use "sass:map";
 
+$space: max(2em, calc(100vw / 24));
 // Default theme base
 $base: (
-  borderRadius: 1em,
+  borderRadius: 0.25rem,
   shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.1),
-  space: 1em,
+  space-xl: max(calc(100vw / 12), 4em),
+  space-l: max(calc(100vw / 18), 3em),
+  space: max(calc(100vw / 24), 2em),
+  space-s: max(calc(100vw / 48), 1em),
+  space-xs: max(calc(100vw / 96), 0.5em),
   transition: 0.3s ease-in-out,
 ) !default;
 

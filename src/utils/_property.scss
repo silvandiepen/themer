@@ -63,14 +63,6 @@
 }
 
 @mixin property($args...) {
-  $m: &;
-
-  @if not list-contains($args, "use-path") {
-    $m: get-last-property($m);
-  }
-
-  $m: cleanup-path($m);
-
   @each $arg in $args {
     @if is-property-list($arg) {
       @each $property in $arg {
@@ -78,7 +70,19 @@
         $value: nth($property, 2);
 
         @if is-themable($prop) {
-          #{$prop}: variable("#{$m}#{letter-uppercase($prop)}", $value);
+          $var: "#{letter-uppercase($prop)}";
+
+          @if get-setting(classBasedProperties) == false {
+            $m: &;
+
+            @if not list-contains($args, "use-path") {
+              $m: get-last-property($m);
+            }
+            $m: cleanup-path($m);
+            $var: "#{$m}#{letter-uppercase($prop)}";
+          }
+          // #{$prop}: variable("#{$m}#{letter-uppercase($prop)}", $value);
+          #{$prop}: variable($var, $value);
         } @else {
           #{$prop}: #{$value};
         }

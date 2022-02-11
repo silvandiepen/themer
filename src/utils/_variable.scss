@@ -74,20 +74,24 @@ $cached-variables: ();
 ///
 
 @function get-variable-value($var, $default) {
+  // If it has a cached value, return it.
   @if map.get($cached-variables, $var) {
-    $default: map.get($cached-variables, $var);
-  } @else if has-default($var) and $default == "" {
+    @return map.get($cached-variables, $var);
+  }
+
+  // If the variable has a value and default is empty.
+  @if has-default($var) and $default == "" {
     $default: get-default($var);
     $cached-variables: set-variable-cached($var, $default) !global;
-  } @else if
-    type-of($default) ==
-    "string" and
-    $default !=
-    "" and
-    isCamelCase($default)
+    @return $default;
+  }
+
+  // Otherwise, if default is a string and default isnt empty default is camelCase.
+  @if type-of($default) == "string" and $default != "" and isCamelCase($default)
   {
     $default: variable($default);
     $cached-variables: set-variable-cached($var, $default) !global;
+    @return $default;
   }
 
   @return $default;
@@ -103,8 +107,23 @@ $cached-variables: ();
 /// @return {string}
 ///
 
-@function variable-name($var) {
-  $variable: "--#{$prefix}#{camelCaseToKebabCase($var)}";
+@function variable-name($var, $default) {
+  $defaultValue: map.get($cached-defaults, $var);
+  $variable: "";
+
+  @if $defaultValue and $default == "" {
+    $variable: "--#{$prefix}#{camelCaseToKebabCase($var)}";
+  } @else {
+    $m: "";
+    @if get-setting(classBasedProperties) {
+      $m: &;
+      $m: get-last-property($m);
+      // $m: cleanup-path($m);
+      // $m: camelCaseToKebabCase($m);
+      $m: "test";
+    }
+    $variable: "--#{$prefix}#{$m}-#{camelCaseToKebabCase($var)}";
+  }
 
   @return $variable;
 }
@@ -129,16 +148,13 @@ $cached-variables: ();
   @if $cached-value {
     @return $cached-value;
   }
-
   // Create variable name
-  $variable: variable-name($var);
-
-  $cached-var-value: map.get($cached-defaults, $var);
-
+  $variable: variable-name($var, $default);
   $default: get-variable-value($var, $default);
 
   // Return
   $returnValue: "";
+
   @if $default != "" {
     $returnValue: var(#{$variable}, $default);
   } @else {

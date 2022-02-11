@@ -1,4 +1,6 @@
 @use "sass:map";
+
+$runs: 1;
 // Default theme settings
 $colors: (
   background: #ffffff,
@@ -19,8 +21,8 @@ $theme-colors: () !default;
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
 
-$darkmode-colors: $colors;
-$lightmode-colors: $colors;
+$darkmode-colors: ();
+$lightmode-colors: ();
 
 // Generate Colors per Color Mode
 
@@ -31,30 +33,35 @@ $has-colors-opacity: map.get($settings, "colors", "opacity");
 $has-colors-text: map.get($settings, "colors", "text");
 $steps: map.get($settings, colors, shadeSteps);
 
-@if $has-colors-colormodes or $has-colors-generate {
-  $darkmode-colors: toMode("dark", $colors) !global;
-  $lightmode-colors: toMode("light", $colors) !global;
+@import "../modules/color";
 
-  @if $has-colors-shades {
-    @if $has-colors-opacity {
-      $darkmode-colors: addOpacityShades(
-        $darkmode-colors,
-        $steps,
-        false
-      ) !global;
-      $lightmode-colors: addOpacityShades(
-        $lightmode-colors,
-        $steps,
-        false
-      ) !global;
-    } @else {
-      $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
-      $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+@if $app {
+  @if $has-colors-colormodes or $has-colors-generate {
+    $darkmode-colors: toMode("dark", $colors) !global;
+    $lightmode-colors: toMode("light", $colors) !global;
+
+    @if $has-colors-shades {
+      @if $has-colors-opacity {
+        $darkmode-colors: addOpacityShades(
+          $darkmode-colors,
+          $steps,
+          false
+        ) !global;
+        $lightmode-colors: addOpacityShades(
+          $lightmode-colors,
+          $steps,
+          false
+        ) !global;
+      } @else {
+        $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
+        $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+      }
     }
-  }
-  @if $has-colors-text {
-    $darkmode-colors: addTextColor($darkmode-colors) !global;
-    $lightmode-colors: addTextColor($lightmode-colors) !global;
+
+    @if $has-colors-text {
+      $darkmode-colors: addTextColor($darkmode-colors) !global;
+      $lightmode-colors: addTextColor($lightmode-colors) !global;
+    }
   }
 }
 
@@ -66,6 +73,7 @@ $steps: map.get($settings, colors, shadeSteps);
     $colors: addShades($colors, $steps) !global;
   }
 }
+
 @if $has-colors-text {
   $colors: addTextColor($colors) !global;
 }

@@ -1,5 +1,8 @@
 $theme-settings: (
   prefix: "test",
+  colors: (
+    generateColorModes: true,
+  ),
 );
 
 @import "../src/index.scss";
