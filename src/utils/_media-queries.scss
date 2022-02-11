@@ -1,45 +1,45 @@
 @use "sass:map";
 
+$breakpoint-names: ();
+$breakpoints: map-deep-get($settings, "breakpoints");
+
 @function breakpoint-exists($name) {
-  @if get-default("breakpoint.#{$name}") {
-    @return true;
+  $bp: map.get($breakpoints, $name);
+  @if $bp {
+    @if $bp > -1 {
+      @return true;
+    } @else {
+      @return false;
+    }
   } @else {
     @return false;
   }
 }
+
 @function get-breakpoint($name) {
   @if breakpoint-exists($name) {
-    @return get-default("breakpoint.#{$name}");
+    @return map.get($breakpoints, $name);
   } @else {
     @warn "#{$name} does not exist in breakpoints";
   }
 }
+
 @function get-next-breakpoint($name) {
-  $_bp_list: get-default("breakpoint.names");
+  $index: map-index($breakpoints, $name);
+  $index: $index + 2;
+  @if $index > length($breakpoints) {
+    @return 9999;
+  }
+  $next-name: nth(nth($breakpoints, $index), 1);
 
-  $_c_bp-idx: index($_bp_list, $name);
-  $_n_bp_idx: parseInt($_c_bp-idx + 1);
-  $_n_bp_name: nth($_bp_list, $_n_bp_idx);
-
-  @if breakpoint-exists($_n_bp_name) {
-    @return get-default("breakpoint.#{$_n_bp_name}");
+  @if breakpoint-exists($next-name) {
+    @return map.get($breakpoints, $next-name);
   } @else {
     @return 9999;
   }
 }
-@function get-previous-breakpoint($name) {
-  $_bp_list: get-default("breakpoint.names");
-  $_c_bp-idx: index($_bp_list, $name);
-  $_p_bp_idx: parseInt($_p_bp-idx - 1);
-  $_p_bp_name: nth($_bp_list, $_p_bp_idx);
-  @if breakpoint-exists($_p_bp_name) {
-    @return get-default("breakpoint.#{$_p_bp_name}");
-  } @else {
-    @return 0;
-  }
-}
 
-@function breakpoint($name, $target: "up") {
+@function breakpoint($name, $target: "only") {
   @if breakpoint-exists($name) {
     @if $target == "up" {
       @return "screen and (min-width: #{get-breakpoint($name)}px)";
@@ -53,10 +53,18 @@
   } @else {
     @warn "#{$name} does not exist in breakpoints";
   }
+  @return "";
+}
+
+@function bp($name, $target: "only") {
+  @return breakpoint($name, $target);
 }
 
 @mixin breakpoint($name, $target: "only") {
   @media #{breakpoint($name,$target)} {
     @content;
   }
+}
+@mixin bp($name, $target: "only") {
+  @include breakpoint($name, $target);
 }

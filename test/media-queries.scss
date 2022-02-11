@@ -1,0 +1,72 @@
+@import "../src/use.scss";
+
+.mq-test-small {
+  @include breakpoint(small, down) {
+    content: "small, down - mixin";
+  }
+
+  @media #{breakpoint(small,down)} {
+    content: "small, down - @media";
+  }
+  @include breakpoint(small, only) {
+    content: "small, only - mixin";
+  }
+
+  @media #{breakpoint(small,only)} {
+    content: "small, only - @media";
+  }
+  @include breakpoint(small, up) {
+    content: "small, up - mixin";
+  }
+
+  @media #{breakpoint(small,up)} {
+    content: "small, up - @media";
+  }
+}
+
+.mq-test-medium {
+  @include breakpoint(medium, down) {
+    content: "medium, down - mixin";
+  }
+
+  @media #{breakpoint(medium,down)} {
+    content: "medium, down - @media";
+  }
+  @include breakpoint(medium, only) {
+    content: "medium, only - mixin";
+  }
+
+  @media #{breakpoint(medium,only)} {
+    content: "medium, only - @media";
+  }
+  @include breakpoint(medium, up) {
+    content: "medium, up - mixin";
+  }
+
+  @media #{breakpoint(medium,up)} {
+    content: "medium, up - @media";
+  }
+}
+.mq-test-large {
+  @include breakpoint(large, down) {
+    content: "large, down - mixin";
+  }
+
+  @media #{breakpoint(large,down)} {
+    content: "large, down - @media";
+  }
+  @include breakpoint(large, only) {
+    content: "large, only - mixin";
+  }
+
+  @media #{breakpoint(large,only)} {
+    content: "large, only - @media";
+  }
+  @include breakpoint(large, up) {
+    content: "large, up - mixin";
+  }
+
+  @media #{breakpoint(large,up)} {
+    content: "large, up - @media";
+  }
+}
