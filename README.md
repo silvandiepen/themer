@@ -8,9 +8,21 @@ Themer can help you themifying your css.
 
 ## Usage
 
-```
+
+In your global CSS file.
+
+```scss
+@import "@sil/themer/app";
 
 ```
+
+In a component file, this version does come with all the functions, but without any output.
+
+```scss
+@import "@sil/themer/use";
+```
+
+
 
 ## Customizing
 
@@ -68,7 +80,13 @@ All settings have been split up into; settings, base, colors and typography.
 
 By default all defined code will be outputed, but if you don't need the color shades, or automatic text colors. You can also disable this.
 
-```
+```scss
+$theme-settings: (
+  prefix: 'my-project'
+);
+
+@import "@sil/themer/app";
+
 
 ```
 
@@ -86,15 +104,15 @@ Variable is the main function of themer, variable will help you create the custo
 // $theme-settings: ( prefix: 'myProject' );
 
 .example {
-  background-color: variable(exampleBackgroundColor, background);
-  background-color: variable(exampleColor, foreground);
+  background-color: v(backgroundColor, background);
+  color: v(Color, foreground);
   top: 0;
 }
 ```
 
 **output**
 
-```scss
+```css
 .example {
   background-color: var(
     --my-project-example-background-color,
@@ -127,7 +145,7 @@ To make it even easier and faster, there is the property mixin. The property mix
 
 **output**
 
-```scss
+```css
 .example {
   background-color: var(
     --my-project-example-background-color,
@@ -162,7 +180,7 @@ $base: (
 
 **output**
 
-```scss
+```css
 :root {
   --my-project-border-radius: 1em;
   --my-project-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.1);
