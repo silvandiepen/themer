@@ -1,0 +1,44 @@
+h1 {
+  font-size: v(space-l);
+}
+h2 {
+  font-size: v(space);
+}
+h3 {
+  font-size: v(space-s);
+}
+h4 {
+  font-size: 1.1em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 0.875em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+img,
+button,
+table,
+pre {
+  & + h1,
+  & + h2,
+  & + h3,
+  & + h4,
+  & + h5,
+  & + h6,
+  & + p,
+  & + img,
+  & + button,
+  & + table,
+  & + pre {
+    margin-top: 1em;
+  }
+}

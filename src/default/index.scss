@@ -6,5 +6,6 @@ $cached-defaults: ();
 @import "./themable";
 @import "./colors.scss";
 
+@import "../modules/settings";
 @import "../modules/default";
 @import "../utils";
