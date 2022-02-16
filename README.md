@@ -87,7 +87,6 @@ $theme-settings: (
 
 @import "@sil/themer/app";
 
-
 ```
 
 ## Functions & Mixins
@@ -96,7 +95,7 @@ $theme-settings: (
 
 Variable is the main function of themer, variable will help you create the custom properties automatically based on the information given. It will determine if the value given has a default and automatically add these defaults.
 
-> tip: You can also just use `v` instead of `variable`)
+> tip: You can also just use `v` instead of `variable`
 
 **input**
 
@@ -104,7 +103,7 @@ Variable is the main function of themer, variable will help you create the custo
 // $theme-settings: ( prefix: 'myProject' );
 
 .example {
-  background-color: v(backgroundColor, background);
+  background-color: v(backgroundColor, primary);
   color: v(Color, foreground);
   top: 0;
 }
@@ -116,7 +115,7 @@ Variable is the main function of themer, variable will help you create the custo
 .example {
   background-color: var(
     --my-project-example-background-color,
-    var(--my-project-background, #ffffff)
+    var(--my-project-primary, #ff9900)
   );
   color: var(--my-project-example-color, var(--my-project-foreground, #ffffff));
   top: 0;
@@ -188,3 +187,6 @@ $base: (
   --my-project-transition: 0.3s ease-in-out;
 }
 ```
+
+
+[gist=2d9aff65094156a9f52f67594e8000d0]
