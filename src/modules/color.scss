@@ -88,7 +88,7 @@ $mix-color: null;
       @each $shade in $shades {
         @if $shade != null {
           $color-name: "#{$name}#{$shade}";
-          $color-variable: var(--#{$prefix}#{$name}#{$shade}-rgb);
+          $color-variable: var(--#{$prefix}#{$name}-rgb);
           $color-value: rgba($color-variable, 0.01 * $shade);
           $add-colors: map.set($add-colors, $color-name, $color-value);
         }
