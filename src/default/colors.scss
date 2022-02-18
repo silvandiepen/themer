@@ -18,6 +18,9 @@ $colors: (
 // Define empty customisable map for colors
 $theme-colors: () !default;
 
+// Colors to be used to generate variables
+$var-colors: ();
+
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
 $color-shades: ();
@@ -47,6 +50,8 @@ $has-colors-text: map.get($settings, "colors", "text");
 $steps: map.get($settings, colors, shadeSteps);
 
 @import "../modules/color";
+
+$og-colors: $colors;
 
 @if $app {
   $colors: addDark($colors);
@@ -180,8 +185,9 @@ $steps: map.get($settings, colors, shadeSteps);
     ),
     $color-shades
   );
+  $colors: map.merge($colors, $og-colors) !global;
 } @else {
-  $colors: map.merge($colors, $color-shades) !global;
+  $colors: map.merge($colors, $color-shades);
   $colors: map.merge($colors, $color-text) !global;
 }
 

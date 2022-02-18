@@ -3,9 +3,9 @@
   html {
     padding: 0;
     margin: 0;
-    background-color: variable(background);
-    color: variable(foreground);
-    font-size: variable(baseSize);
-    font-family: variable(primaryFontFamily);
+    background-color: v(background);
+    color: v(foreground);
+    font-size: v(baseSize);
+    font-family: v(primaryFontFamily);
   }
 }
