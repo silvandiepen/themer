@@ -118,9 +118,8 @@ $cached-variables: ();
     @if get-setting(classBasedProperties) {
       $m: &;
       $m: get-last-property($m);
-      // $m: cleanup-path($m);
-      // $m: camelCaseToKebabCase($m);
-      $m: "test";
+      $m: cleanup-path($m);
+      $m: camelCaseToKebabCase($m);
     }
     $variable: "--#{$prefix}#{$m}-#{camelCaseToKebabCase($var)}";
   }
