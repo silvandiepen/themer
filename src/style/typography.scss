@@ -1,20 +1,26 @@
 @if $has-style {
   h1 {
+    font-family: v(headingFontFamily, primaryFontFamily);
     font-size: v(space-l);
   }
   h2 {
-    font-size: v(space);
+    font-family: v(headingFontFamily, primaryFontFamily);
+    font-size: min(v(space), 4em);
   }
   h3 {
-    font-size: v(space-s);
+    font-family: v(headingFontFamily, primaryFontFamily);
+    font-size: min(v(space-s), 3em);
   }
   h4 {
+    font-family: v(headingFontFamily, primaryFontFamily);
     font-size: 1.1em;
   }
   h5 {
+    font-family: v(headingFontFamily, primaryFontFamily);
     font-size: 1em;
   }
   h6 {
+    font-family: v(headingFontFamily, primaryFontFamily);
     font-size: 0.875em;
   }
 
