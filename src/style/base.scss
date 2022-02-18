@@ -1,12 +1,11 @@
-body,
-html {
-  padding: 0;
-  margin: 0;
-  background-color: variable(background);
-  color: variable(foreground);
-  font-size: variable(baseSize);
-  font-family: variable(primaryFontFamily);
-}
-* {
-  box-sizing: border-box;
+@if $has-style {
+  body,
+  html {
+    padding: 0;
+    margin: 0;
+    background-color: variable(background);
+    color: variable(foreground);
+    font-size: variable(baseSize);
+    font-family: variable(primaryFontFamily);
+  }
 }

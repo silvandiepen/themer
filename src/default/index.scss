@@ -1,5 +1,7 @@
 $cached-defaults: ();
 
+@import "../utils";
+
 @import "./settings";
 @import "./typography";
 @import "./base";
@@ -8,4 +10,4 @@ $cached-defaults: ();
 
 @import "../modules/settings";
 @import "../modules/default";
-@import "../utils";
+@import "../functions";

@@ -3,6 +3,9 @@
 $app: true;
 
 @import "./default/index";
+
+$has-style: map.get($settings, "styleOutput");
+
 @import "./style/base.scss";
 @import "./style/reset.scss";
 @import "./style/typography.scss";
@@ -15,18 +18,22 @@ $app: true;
   @if map.get($settings, "colors", colorModes) {
     @media (prefers-color-scheme: dark) {
       :root {
+        @include customProperties($darkmode-rgb, "-rgb");
         @include customProperties($darkmode-colors);
       }
     }
     @media (prefers-color-scheme: light) {
       :root {
+        @include customProperties($lightmode-rgb, "-rgb");
         @include customProperties($lightmode-colors);
       }
     }
     [color-mode="dark"] {
+      @include customProperties($darkmode-rgb, "-rgb");
       @include customProperties($darkmode-colors);
     }
     [color-mode="light"] {
+      @include customProperties($lightmode-rgb, "-rgb");
       @include customProperties($lightmode-colors);
     }
   } @else {

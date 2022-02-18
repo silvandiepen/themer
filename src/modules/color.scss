@@ -47,7 +47,7 @@ $mix-color: null;
   }
 }
 
-@function getMixColor($color, $colorset: $colors, $cached: true) {
+@function getMixColor($color, $colorset: $colors, $cached: true, $name: false) {
   @if $cached {
     @if $cache-bg == null {
       $cache-bg: get-color("background", $colorset) !global;
@@ -61,31 +61,70 @@ $mix-color: null;
   }
 
   @if $cache-bg == $color {
-    @return $cache-fg;
+    @if $name {
+      @return "foreground";
+    } @else {
+      @return $cache-fg;
+    }
   } @else {
-    @return $cache-bg;
+    @if $name {
+      @return "background";
+    } @else {
+      @return $cache-bg;
+    }
   }
 }
 
-@function addOpacityShades($shade-colors, $shades: (), $cached: true) {
+@function generateOpacityShades($shade-colors, $shades: (), $cached: true) {
   $add-colors: ();
+
+  $prefix: map.get($settings, "prefix");
+  @if $prefix {
+    $prefix: "#{$prefix}-";
+  }
 
   @each $name, $value in $shade-colors {
     @if length($shades) > 0 {
       @each $shade in $shades {
         @if $shade != null {
           $color-name: "#{$name}#{$shade}";
-          $color-value: rgba($value, 0.01 * $shade);
+          $color-variable: var(--#{$prefix}#{$name}#{$shade}-rgb);
+          $color-value: rgba($color-variable, 0.01 * $shade);
           $add-colors: map.set($add-colors, $color-name, $color-value);
         }
       }
     }
   }
+  @return $add-colors;
+}
+@function generateColorMixShades($shade-colors, $shades: (), $cached: true) {
+  $add-colors: ();
 
-  @return map.merge($shade-colors, $add-colors);
+  $prefix: map.get($settings, "prefix");
+  @if $prefix {
+    $prefix: "#{$prefix}-";
+  }
+
+  @each $name, $value in $shade-colors {
+    @if length($shades) > 0 {
+      @each $shade in $shades {
+        @if $shade != null {
+          $color-name: "#{$name}#{$shade}";
+
+          $name-variable-var: var(--#{$prefix}#{$name});
+          $mix-color-var: var(
+            --#{$prefix}#{getMixColor($value, $shade-colors, $cached, true)}
+          );
+          $color-value: "color-mix(in srgb, #{$name-variable-var} #{percentage(math.div($shade,100))}, #{$mix-color-var})";
+          $add-colors: map.set($add-colors, $color-name, $color-value);
+        }
+      }
+    }
+  }
+  @return $add-colors;
 }
 
-@function addShades($shade-colors, $shades: (), $cached: true) {
+@function generateShades($shade-colors, $shades: (), $cached: true) {
   $add-colors: ();
 
   @each $name, $value in $shade-colors {
@@ -99,17 +138,18 @@ $mix-color: null;
     }
   }
 
-  @return map.merge($shade-colors, $add-colors);
+  @return $add-colors;
 }
 
-@function addTextColor($text-colors) {
+@function generateTextColor($text-colors) {
   $add-colors: ();
+
   @each $name, $value in $text-colors {
     $color-name: "#{$name}Text";
     $color-value: getTextColor($value);
     $add-colors: map.set($add-colors, $color-name, $color-value);
   }
-  @return map.merge($text-colors, $add-colors);
+  @return $add-colors;
 }
 
 @function text-contrast($color, $dark: black, $light: white) {
@@ -155,12 +195,24 @@ $mix-color: null;
     $darkmode: ($cache-bg-light > $cache-fg-light) !global;
   }
 
-  $light: $cache-bg;
-  $dark: $cache-fg;
+  // $light: $cache-bg;
+  // $dark: $cache-fg;
 
+  // @if $darkmode {
+  //   $light: $cache-fg;
+  //   $dark: $cache-bg;
+  // }
+
+  $prefix: map.get($settings, "prefix");
+  @if $prefix != "" {
+    $prefix: "#{$prefix}-";
+  }
+
+  $light: var(--#{$prefix}light);
+  $dark: var(--#{$prefix}dark);
   @if $darkmode {
-    $light: $cache-fg;
-    $dark: $cache-bg;
+    $dark: var(--#{$prefix}light);
+    $light: var(--#{$prefix}dark);
   }
 
   $color-value: text-contrast($color-value, $dark, $light);
@@ -168,11 +220,31 @@ $mix-color: null;
   @return $color-value;
 }
 
+@function toRgb($str) {
+  $list: str-to-list($str, ",");
+
+  @return rgb(
+    parseInt(nth($list, 1)),
+    parseInt(nth($list, 2)),
+    parseInt(nth($list, 3))
+  );
+}
+
 @function toMode($mode, $clrs) {
   $mode-colors: ();
 
   $bg: map.get($clrs, "background");
   $fg: map.get($clrs, "foreground");
+
+  $og-bg: $bg;
+  $og-fg: $fg;
+
+  @if type-of($bg) == "string" {
+    $bg: toRgb($bg);
+  }
+  @if type-of($fg) == "string" {
+    $fg: toRgb($fg);
+  }
 
   $bg-lightness: lightness($bg);
   $fg-lightness: lightness($fg);
@@ -188,9 +260,80 @@ $mix-color: null;
     @return map.merge(
       $clrs,
       (
-        background: $fg,
-        foreground: $bg,
+        background: $og-fg,
+        foreground: $og-bg,
       )
     );
   }
+}
+
+@function toVars($clrs) {
+  $varred: ();
+
+  $prefix: map.get($settings, "prefix");
+  @if $prefix != "" {
+    $prefix: "#{$prefix}-";
+  }
+
+  @each $name, $value in $clrs {
+    $varred: map.set($varred, $name, rgba(var(--#{$prefix}#{$name}-rgb), 1));
+  }
+  @return $varred;
+}
+
+@function addDark($clrs) {
+  $bg: map.get($clrs, "background");
+  $fg: map.get($clrs, "foreground");
+
+  $bg-lightness: lightness($bg);
+  $fg-lightness: lightness($fg);
+
+  $dark: $fg;
+  @if $bg-lightness < $fg-lightness {
+    $dark: $bg;
+  }
+
+  @return map.merge(
+    $clrs,
+    (
+      dark: $dark,
+    )
+  );
+}
+@function addLight($clrs) {
+  $bg: map.get($clrs, "background");
+  $fg: map.get($clrs, "foreground");
+
+  $bg-lightness: lightness($bg);
+  $fg-lightness: lightness($fg);
+
+  $light: $bg;
+  @if $bg-lightness < $fg-lightness {
+    $light: $fg;
+  }
+
+  @return map.merge(
+    $clrs,
+    (
+      light: $light,
+    )
+  );
+}
+
+@function addRGB($clrs) {
+  $rgb: ();
+
+  @each $color-name, $v in $clrs {
+    $rgb: map.merge(
+      $rgb,
+      (
+        $color-name: "#{red($v)}, #{green($v)}, #{blue($v)}",
+      )
+    );
+  }
+  @return $rgb;
+}
+
+@function rgbValues($clr) {
+  @return "#{red($clr)}, #{green($clr)}, #{blue($clr)}";
 }

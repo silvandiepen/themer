@@ -36,12 +36,12 @@ $cached-variables: ();
 /// @param {map} $group
 /// @return {string}
 ///
-@mixin customProperties($group) {
+@mixin customProperties($group, $affix: "") {
   @each $name, $value in $group {
     @if $value == "" {
       $value: '""';
     }
-    --#{$prefix}#{camelCaseToKebabCase($name)}: #{$value};
+    --#{$prefix}#{camelCaseToKebabCase($name)}#{$affix}: #{$value};
   }
 }
 

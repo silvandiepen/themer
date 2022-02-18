@@ -20,9 +20,21 @@ $theme-colors: () !default;
 
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
+$color-shades: ();
+$color-text: ();
+$color-generated-shades: ();
 
+$darkmode-text: ();
+$darkmode-rgb: ();
+$darkmode-shades: ();
 $darkmode-colors: ();
+$darkmode-generated: ();
+
+$lightmode-text: ();
+$lightmode-rgb: ();
+$lightmode-shades: ();
 $lightmode-colors: ();
+$lightmode-generated: ();
 
 // Generate Colors per Color Mode
 
@@ -30,53 +42,115 @@ $has-colors-colormodes: map.get($settings, "colors", "colorModes");
 $has-colors-generate: map.get($settings, "colors", "generateColorModes");
 $has-colors-shades: map.get($settings, "colors", "shades");
 $has-colors-opacity: map.get($settings, "colors", "opacity");
+$has-colors-experimental: map.get($settings, "colors", "experimental");
 $has-colors-text: map.get($settings, "colors", "text");
 $steps: map.get($settings, colors, shadeSteps);
 
 @import "../modules/color";
 
 @if $app {
+  $colors: addDark($colors);
+  $colors: addLight($colors);
+
   @if $has-colors-colormodes or $has-colors-generate {
     $darkmode-colors: toMode("dark", $colors) !global;
     $lightmode-colors: toMode("light", $colors) !global;
 
+    // @if $has-colors-opacity {
+    $darkmode-rgb: toMode("dark", addRGB($colors));
+    $lightmode-rgb: toMode("light", addRGB($colors));
+    // }
+
+    /*
+    * Generate all shades, 
+    * also in opacity mode so text colors can be generated
+    */
+
+    $darkmode-generated: generateShades(
+      $darkmode-colors,
+      $steps,
+      false
+    ) !global;
+    $lightmode-generated: generateShades(
+      $lightmode-colors,
+      $steps,
+      false
+    ) !global;
+
     @if $has-colors-shades {
       @if $has-colors-opacity {
-        $darkmode-colors: addOpacityShades(
+        /*
+        *  Opacity colors
+        */
+        $darkmode-shades: generateOpacityShades(
           $darkmode-colors,
           $steps,
           false
         ) !global;
-        $lightmode-colors: addOpacityShades(
+
+        $lightmode-shades: generateOpacityShades(
           $lightmode-colors,
           $steps,
           false
         ) !global;
       } @else {
-        $darkmode-colors: addShades($darkmode-colors, $steps, false) !global;
-        $lightmode-colors: addShades($lightmode-colors, $steps, false) !global;
+        /*
+        *  Apply generated shades in non-opacity mode
+        */
+        @if $has-colors-experimental {
+          @warn "You are generating colors in experimental mode, these colors won't actually work in any browser (yet)";
+          $darkmode-shades: generateColorMixShades(
+            $darkmode-colors,
+            $steps,
+            false
+          ) !global;
+          $lightmode-shades: generateColorMixShades(
+            $lightmode-colors,
+            $steps,
+            false
+          ) !global;
+        } @else {
+          $darkmode-shades: $darkmode-generated !global;
+          $lightmode-shades: $lightmode-generated !global;
+        }
       }
     }
 
     @if $has-colors-text {
-      $darkmode-colors: addTextColor($darkmode-colors) !global;
-      $lightmode-colors: addTextColor($lightmode-colors) !global;
+      $darkmode-text: generateTextColor($darkmode-generated) !global;
+      $lightmode-text: generateTextColor($lightmode-generated) !global;
     }
   }
+
+  // @if $has-colors-opacity {
+  $darkmode-colors: toVars($darkmode-colors) !global;
+  $lightmode-colors: toVars($lightmode-colors) !global;
+  // }
+
+  $lightmode-colors: map.merge($lightmode-colors, $lightmode-shades);
+  $lightmode-colors: map.merge($lightmode-colors, $lightmode-text);
+
+  $darkmode-colors: map.merge($darkmode-colors, $darkmode-shades) !global;
+  $darkmode-colors: map.merge($darkmode-colors, $darkmode-text) !global;
 }
 
 // Generate all base colors and shades.
 @if $has-colors-shades {
+  $color-generated-shades: generateShades($colors, $steps) !global;
   @if $has-colors-opacity {
-    $colors: addOpacityShades($colors, $steps) !global;
+    $color-shades: generateOpacityShades($colors, $steps) !global;
   } @else {
-    $colors: addShades($colors, $steps) !global;
+    $color-shades: $color-generated-shades;
   }
 }
 
 @if $has-colors-text {
-  $colors: addTextColor($colors) !global;
+  $all-colors: map.merge($colors, $color-generated-shades);
+  $color-text: generateTextColor($all-colors) !global;
 }
+
+$colors: map.merge($colors, $color-shades);
+$colors: map.merge($colors, $color-text);
 
 // Add all shades to the cached defaults.
 $cached-defaults: map.merge($cached-defaults, $colors) !global;

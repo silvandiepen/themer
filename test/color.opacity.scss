@@ -1,0 +1,12 @@
+@use "sass:map";
+
+$theme-settings: (
+  styleOutput: false,
+  colors: (
+    generateColorModes: true,
+    opacity: true,
+    experimental: false,
+  ),
+);
+
+@import "../src/index";

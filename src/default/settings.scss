@@ -6,6 +6,7 @@ $theme-settings: () !default;
 // Default theme settings
 $settings: (
   prefix: "",
+  styleOutput: true,
   classBasedProperties: true,
   properties: (
     base: true,

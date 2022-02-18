@@ -13,6 +13,7 @@
     "build:app": "sass test/app.scss dist/app.css",
     "build:style": "sass test/style.scss dist/style.css",
     "build:mq": "sass test/media-queries.scss dist/mq.css",
+    "build:color:opacity": "sass test/color.opacity.scss dist/color.opacity.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
