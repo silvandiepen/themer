@@ -259,7 +259,7 @@ $prefix: map.get($settings, "prefix");
   }
 }
 
-@function toVars($clrs, $mode) {
+@function toVars($clrs, $mode, $rgb: true) {
   $varred: ();
 
   @each $name, $value in $clrs {
@@ -279,12 +279,15 @@ $prefix: map.get($settings, "prefix");
         $var-name: "dark";
       }
     }
-    $varred: map.set(
-      $varred,
-      $name,
-      rgba(var(--#{$prefix}#{$var-name}-rgb), 1)
-    );
+
+    $variable: var(--#{$prefix}#{$var-name}-rgb);
+    @if $rgb {
+      $variable: rgba($variable, 1);
+    }
+
+    $varred: map.set($varred, $name, $variable);
   }
+
   @return $varred;
 }
 

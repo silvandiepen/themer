@@ -116,7 +116,11 @@ $steps: map.get($settings, colors, shadeSteps);
     $darkmode-colors: map.merge(
       $darkmode-colors,
       addAffix(
-        filterColors($darkmode-rgb, "include", ("background", "foreground")),
+        toVars(
+          filterColors($darkmode-rgb, "include", ("background", "foreground")),
+          "dark",
+          false
+        ),
         "rgb"
       )
     ) !global;
@@ -128,7 +132,11 @@ $steps: map.get($settings, colors, shadeSteps);
     $lightmode-colors: map.merge(
       $lightmode-colors,
       addAffix(
-        filterColors($lightmode-rgb, "include", ("background", "foreground")),
+        toVars(
+          filterColors($lightmode-rgb, "include", ("background", "foreground")),
+          "light",
+          false
+        ),
         "rgb"
       )
     ) !global;
