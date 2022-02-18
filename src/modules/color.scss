@@ -267,7 +267,7 @@ $mix-color: null;
   }
 }
 
-@function toVars($clrs) {
+@function toVars($clrs, $mode) {
   $varred: ();
 
   $prefix: map.get($settings, "prefix");
@@ -276,7 +276,27 @@ $mix-color: null;
   }
 
   @each $name, $value in $clrs {
-    $varred: map.set($varred, $name, rgba(var(--#{$prefix}#{$name}-rgb), 1));
+    $var-name: $name;
+    @if $mode == "dark" {
+      @if $name == "background" {
+        $var-name: "dark";
+      }
+      @if $name == "foreground" {
+        $var-name: "light";
+      }
+    } @else {
+      @if $name == "background" {
+        $var-name: "light";
+      }
+      @if $name == "foreground" {
+        $var-name: "dark";
+      }
+    }
+    $varred: map.set(
+      $varred,
+      $name,
+      rgba(var(--#{$prefix}#{$var-name}-rgb), 1)
+    );
   }
   @return $varred;
 }
@@ -336,4 +356,37 @@ $mix-color: null;
 
 @function rgbValues($clr) {
   @return "#{red($clr)}, #{green($clr)}, #{blue($clr)}";
+}
+
+@function filterColors($clrs, $mode, $values) {
+  $newColors: ();
+
+  @if $mode == "include" {
+    @each $name, $value in $clrs {
+      @if list-contains($values, $name) {
+        $newColors: map.set($newColors, $name, $value);
+      }
+    }
+  } @else if $mode == "exclude" {
+    @each $name, $value in $clrs {
+      @if not list-contains($values, $name) {
+        $newColors: map.set($newColors, $name, $value);
+      }
+    }
+  }
+
+  @return $newColors;
+}
+
+@function addAffix($clrs, $affix) {
+  $newColors: ();
+
+  @if $affix {
+    $affix: "-#{$affix}";
+  }
+
+  @each $name, $value in $clrs {
+    $newColors: map.set($newColors, "#{$name}#{$affix}", $value);
+  }
+  @return $newColors;
 }

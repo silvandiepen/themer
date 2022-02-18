@@ -18,23 +18,24 @@ $has-style: map.get($settings, "styleOutput");
   @if map.get($settings, "colors", colorModes) {
     @media (prefers-color-scheme: dark) {
       :root {
-        @include customProperties($darkmode-rgb, "-rgb");
         @include customProperties($darkmode-colors);
       }
     }
     @media (prefers-color-scheme: light) {
       :root {
-        @include customProperties($lightmode-rgb, "-rgb");
         @include customProperties($lightmode-colors);
       }
     }
     [color-mode="dark"] {
-      @include customProperties($darkmode-rgb, "-rgb");
       @include customProperties($darkmode-colors);
     }
     [color-mode="light"] {
-      @include customProperties($lightmode-rgb, "-rgb");
       @include customProperties($lightmode-colors);
+    }
+    @if map.get($settings, "colors", "opacity") {
+      :root {
+        @include customProperties($colors);
+      }
     }
   } @else {
     :root {
