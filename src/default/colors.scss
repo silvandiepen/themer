@@ -109,28 +109,28 @@ $steps: map.get($settings, colors, shadeSteps);
   }
 
   @if $has-colors-opacity {
+    $darkmode-colors: toVars(
+      filterColors($darkmode-colors, "include", ("background", "foreground")),
+      "dark"
+    );
     $darkmode-colors: map.merge(
       $darkmode-colors,
       addAffix(
         filterColors($darkmode-rgb, "include", ("background", "foreground")),
         "rgb"
       )
-    );
-    $darkmode-colors: toVars(
-      filterColors($darkmode-colors, "include", ("background", "foreground")),
-      "dark"
     ) !global;
 
+    $lightmode-colors: toVars(
+      filterColors($lightmode-colors, "include", ("background", "foreground")),
+      "light"
+    );
     $lightmode-colors: map.merge(
       $lightmode-colors,
       addAffix(
         filterColors($lightmode-rgb, "include", ("background", "foreground")),
         "rgb"
       )
-    );
-    $lightmode-colors: toVars(
-      filterColors($lightmode-colors, "include", ("background", "foreground")),
-      "light"
     ) !global;
   } @else {
     $lightmode-colors: map.merge(

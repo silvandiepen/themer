@@ -13,6 +13,11 @@ $cache-avg-light: null;
 $darkmode: null;
 $mix-color: null;
 
+$prefix: map.get($settings, "prefix");
+@if $prefix != "" {
+  $prefix: "#{$prefix}-";
+}
+
 @mixin resetColorCache() {
   $cache-bg: null !global;
   $cache-fg: null !global;
@@ -195,19 +200,6 @@ $mix-color: null;
     $darkmode: ($cache-bg-light > $cache-fg-light) !global;
   }
 
-  // $light: $cache-bg;
-  // $dark: $cache-fg;
-
-  // @if $darkmode {
-  //   $light: $cache-fg;
-  //   $dark: $cache-bg;
-  // }
-
-  $prefix: map.get($settings, "prefix");
-  @if $prefix != "" {
-    $prefix: "#{$prefix}-";
-  }
-
   $light: var(--#{$prefix}light);
   $dark: var(--#{$prefix}dark);
   @if $darkmode {
@@ -269,11 +261,6 @@ $mix-color: null;
 
 @function toVars($clrs, $mode) {
   $varred: ();
-
-  $prefix: map.get($settings, "prefix");
-  @if $prefix != "" {
-    $prefix: "#{$prefix}-";
-  }
 
   @each $name, $value in $clrs {
     $var-name: $name;

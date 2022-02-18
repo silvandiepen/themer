@@ -1,6 +1,7 @@
 @use "sass:map";
 
 $theme-settings: (
+  prefix: "themer",
   styleOutput: false,
   colors: (
     colorModes: true,
