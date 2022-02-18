@@ -20,6 +20,7 @@ $theme-colors: () !default;
 
 // Colors to be used to generate variables
 $var-colors: ();
+$og-colors: ();
 
 // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
@@ -51,11 +52,11 @@ $steps: map.get($settings, colors, shadeSteps);
 
 @import "../modules/color";
 
-$og-colors: $colors;
-
 @if $app {
   $colors: addDark($colors);
   $colors: addLight($colors);
+
+  $og-colors: $colors !global;
 
   @if $has-colors-colormodes or $has-colors-generate {
     $darkmode-colors: toMode("dark", $colors) !global;
@@ -180,15 +181,27 @@ $og-colors: $colors;
 @if $has-colors-opacity {
   $colors: map.merge(
     addAffix(
-      filterColors($darkmode-rgb, "exclude", ("background", "foreground")),
+      filterColors($lightmode-rgb, "exclude", ("background", "foreground")),
       "rgb"
     ),
     $color-shades
   );
+  $colors: map.merge($colors, $color-text) !global;
+
+  $var-colors: map.merge(
+    $colors,
+    filterColors(
+      toVars($og-colors, "light"),
+      "exclude",
+      ("background", "foreground")
+    )
+  ) !global;
+
   $colors: map.merge($colors, $og-colors) !global;
 } @else {
   $colors: map.merge($colors, $color-shades);
   $colors: map.merge($colors, $color-text) !global;
+  $var-colors: $colors !global;
 }
 
 // Add all shades to the cached defaults.

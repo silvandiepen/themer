@@ -30,51 +30,51 @@ All settings have been split up into; settings, base, colors and typography.
 
 #### Settings
 
-| key                   | value                  |
-| --------------------- | ---------------------- |
-| prefix                | ""                     |
-| properties.base       | true                   |
-| properties.typography | true                   |
-| properties.colors     | true                   |
-| colors.shadeSteps     | ( 10, 25, 50, 75, 90 ) |
-| colors.shades         | true                   |
-| colors.text           | true                   |
-| breakpoints.small     | 0                      |
-| breakpoints.medium    | 720                    |
-| breakpoints.large     | 1200                   |
+| key                   | value                    |
+| --------------------- | ------------------------ |
+| prefix                | `""`                     |
+| properties.base       | `true`                   |
+| properties.typography | `true`                   |
+| properties.colors     | `true`                   |
+| colors.shadeSteps     | `( 10, 25, 50, 75, 90 )` |
+| colors.shades         | `true`                   |
+| colors.text           | `true`                   |
+| breakpoints.small     | `0`                      |
+| breakpoints.medium    | `720`                    |
+| breakpoints.large     | `1200`                   |
 
 #### Base
 
-| key          | value                          |
-| ------------ | ------------------------------ |
-| borderRadius | 1em                            |
-| shadow       | 0 3px 4px 0 rgba(0, 0, 0, 0.1) |
-| space        | 1em                            |
-| transition   | 0.3s ease-in-out               |
+| key          | value                            |
+| ------------ | -------------------------------- |
+| borderRadius | `1em`                            |
+| shadow       | `0 3px 4px 0 rgba(0, 0, 0, 0.1)` |
+| space        | `1em`                            |
+| transition   | `0.3s ease-in-out`               |
 
 #### Colors
 
-| key        | value   |
-| ---------- | ------- |
-| background | #ffffff |
-| foreground | #111111 |
-| primary    | #01eeff |
-| secondary  | #f7166c |
-| tertiary   | #6a2ef7 |
-| caution    | #fed02f |
-| warning    | #fd8324 |
-| error      | #fc1b1c |
-| info       | #7abffc |
-| success    | #54d577 |
+| key        | value     |
+| ---------- | --------- |
+| background | `#ffffff` |
+| foreground | `#111111` |
+| primary    | `#01eeff` |
+| secondary  | `#f7166c` |
+| tertiary   | `#6a2ef7` |
+| caution    | `#fed02f` |
+| warning    | `#fd8324` |
+| error      | `#fc1b1c` |
+| info       | `#7abffc` |
+| success    | `#54d577` |
 
 #### Base
 
-| key          | value                          |
-| ------------ | ------------------------------ |
-| borderRadius | 1em                            |
-| shadow       | 0 3px 4px 0 rgba(0, 0, 0, 0.1) |
-| space        | 1em                            |
-| transition   | 0.3s ease-in-out               |
+| key          | value                            |
+| ------------ | -------------------------------- |
+| borderRadius | `1em`                            |
+| shadow       | `0 3px 4px 0 rgba(0, 0, 0, 0.1)` |
+| space        | `1em`                            |
+| transition   | `0.3s ease-in-out`               |
 
 ## Settings
 

@@ -16,30 +16,32 @@ $has-style: map.get($settings, "styleOutput");
 
 @if map.get($settings, "properties", "colors") {
   @if map.get($settings, "colors", colorModes) {
-    @media (prefers-color-scheme: dark) {
-      :root {
-        @include customProperties($darkmode-colors);
-      }
-    }
     @media (prefers-color-scheme: light) {
-      :root {
+      body {
         @include customProperties($lightmode-colors);
       }
     }
+    @media (prefers-color-scheme: dark) {
+      body {
+        @include customProperties($darkmode-colors);
+      }
+    }
+
     [color-mode="dark"] {
       @include customProperties($darkmode-colors);
     }
     [color-mode="light"] {
       @include customProperties($lightmode-colors);
     }
+
     @if map.get($settings, "colors", "opacity") {
       :root {
-        @include customProperties($colors);
+        @include customProperties($var-colors);
       }
     }
   } @else {
     :root {
-      @include customProperties($colors);
+      @include customProperties($var-colors);
     }
   }
 }

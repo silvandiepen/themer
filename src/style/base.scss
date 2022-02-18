@@ -1,4 +1,7 @@
 @if $has-style {
+  html {
+    background-color: black;
+  }
   body,
   html {
     padding: 0;
