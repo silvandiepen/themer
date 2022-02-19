@@ -7,12 +7,15 @@ $theme-settings: (
 .hamburger {
   background: v(background);
   color: v(foreground);
+
   &__bread {
     background: v(background);
     color: v(foreground);
   }
   &__cheese {
-    /* Should be PRIMARY! */
+    background: v("bg", primary25);
+  }
+  &__mayo {
     background: v("background", primary25);
   }
   &__burger {
@@ -26,67 +29,67 @@ $theme-settings: (
     background: v(bgFill, background);
   }
 }
-.pancake {
-  @include property(
-    (
-      "padding": 10px,
-      "left": 0,
-      "top": 0,
-      "position": absolute,
-      "background": red,
-      "color": foreground,
-    )
-  );
-  &__honey {
-    @include property(
-      (
-        "background-color": background25,
-        "color": background25,
-        padding: 0,
-      )
-    );
-    &:hover {
-      @include property(
-        (
-          transform: scale(0.5),
-          background-color: foreground75,
-        )
-      );
-    }
-    &:focus {
-      @include property(
-        (
-          transform: scale(0.6),
-          background-color: foreground75,
-        )
-      );
-    }
-  }
-}
+// .pancake {
+//   @include property(
+//     (
+//       "padding": 10px,
+//       "left": 0,
+//       "top": 0,
+//       "position": absolute,
+//       "background": red,
+//       "color": foreground,
+//     )
+//   );
+//   &__honey {
+//     @include property(
+//       (
+//         "background-color": background25,
+//         "color": background25,
+//         padding: 0,
+//       )
+//     );
+//     &:hover {
+//       @include property(
+//         (
+//           transform: scale(0.5),
+//           background-color: foreground75,
+//         )
+//       );
+//     }
+//     &:focus {
+//       @include property(
+//         (
+//           transform: scale(0.6),
+//           background-color: foreground75,
+//         )
+//       );
+//     }
+//   }
+// }
 
-.plate {
-  .pancake {
-    @include property(
-      (
-        content: none,
-        background-color: background10,
-      )
-    );
-  }
-}
+// .plate {
+//   .pancake {
+//     @include property(
+//       (
+//         content: none,
+//         background-color: background10,
+//       )
+//     );
+//   }
+// }
 
-.table {
-  .cloth {
-    .plate {
-      .pancake {
-        @include property(
-          (
-            content: none,
-            background-color: background10,
-          ),
-          use-path
-        );
-      }
-    }
-  }
-}
+// .table {
+//   .cloth {
+//     .plate {
+//       .pancake {
+//         @include property(
+//           (
+//             content: none,
+//             background-color: background10,
+//           ),
+//           use-path
+//         );
+//       }
+//     }
+//   }
+// }

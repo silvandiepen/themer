@@ -1,5 +1,5 @@
 $theme-settings: (
-  prefix: "test",
+  prefix: "p",
 );
 
 @import "../src/use.scss";
@@ -25,4 +25,8 @@ $theme-settings: (
       background-color: variable(foreground75);
     }
   }
+}
+
+.else {
+  background: v("test", background);
 }

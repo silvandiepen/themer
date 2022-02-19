@@ -74,15 +74,17 @@ $cached-variables: ();
 ///
 
 @function get-variable-value($var, $default) {
-  // If it has a cached value, return it.
-  @if map.get($cached-variables, $var) {
-    @return map.get($cached-variables, $var);
+  $cache-key: "#{$var}+#{$default}-value";
+
+  // // If it has a cached value, return it.\
+  @if map.get($cached-variables, $cache-key) {
+    @return map.get($cached-variables, $cache-key);
   }
 
   // If the variable has a value and default is empty.
   @if has-default($var) and $default == "" {
     $default: get-default($var);
-    $cached-variables: set-variable-cached($var, $default) !global;
+    $cached-variables: set-variable-cached($cache-key, $default) !global;
     @return $default;
   }
 
@@ -90,7 +92,8 @@ $cached-variables: ();
   @if type-of($default) == "string" and $default != "" and isCamelCase($default)
   {
     $default: variable($default);
-    $cached-variables: set-variable-cached($var, $default) !global;
+    // @debug $default;
+    $cached-variables: set-variable-cached($cache-key, $default) !global;
     @return $default;
   }
 
@@ -108,23 +111,27 @@ $cached-variables: ();
 ///
 
 @function variable-name($var, $default) {
-  $defaultValue: map.get($cached-defaults, $var);
   $variable: "";
 
-  @if $defaultValue and $default == "" {
+  @if $default == "" {
     $variable: "--#{$prefix}#{camelCaseToKebabCase($var)}";
-  } @else {
-    $m: "";
-    @if get-setting(classBasedProperties) {
-      $m: &;
-      $m: get-last-property($m);
-      $m: cleanup-path($m);
-      $m: camelCaseToKebabCase($m);
-    }
-    $variable: "--#{$prefix}#{$m}-#{camelCaseToKebabCase($var)}";
   }
 
   @return $variable;
+}
+
+@function wrap-in-classname($variable, $var) {
+  @if get-setting(classBasedProperties) and $var != "" {
+    $m: &;
+    $m: get-last-property($m);
+    $m: cleanup-path($m);
+    $m: camelCaseToKebabCase($m);
+
+    $v: "#{$prefix}#{$m}-#{$var}";
+    @return var(--#{$v}, #{$variable});
+  } @else {
+    @return $variable;
+  }
 }
 
 /// Variable
@@ -149,14 +156,27 @@ $cached-variables: ();
   }
   // Create variable name
   $variable: variable-name($var, $default);
-  $default: get-variable-value($var, $default);
+
+  $default-value: get-variable-value($var, $default);
 
   // Return
   $returnValue: "";
 
-  @if $default != "" {
-    $returnValue: var(#{$variable}, $default);
+  @if $default-value != "" {
+    $wrapper: "";
+    @if $default != "" and $var != "" {
+      $wrapper: $var;
+    }
+    $v: "";
+    @if $variable != "" {
+      $v: var(#{$variable}, $default-value);
+    } @else {
+      $v: $default-value;
+    }
+    $returnValue: wrap-in-classname($v, $wrapper);
   } @else {
+    @debug "hoi";
+
     $returnValue: #{$var};
   }
 
@@ -168,4 +188,9 @@ $cached-variables: ();
 // Shortcut
 @function v($key, $value: "") {
   @return variable($key, $value);
+}
+
+// Shortcut
+@function _v($key, $value: "") {
+  @return _variable($key, $value);
 }
