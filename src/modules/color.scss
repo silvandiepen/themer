@@ -137,13 +137,56 @@ $prefix: map.get($settings, "prefix");
       @each $shade in $shades {
         $color-name: "#{$name}#{$shade}";
         $mix-color: getMixColor($value, $shade-colors, $cached);
-        $color-value: mix($value, $mix-color, $shade);
+        $color-value: get-mix($value, $mix-color, $shade);
         $add-colors: map.set($add-colors, $color-name, $color-value);
       }
     }
   }
 
   @return $add-colors;
+}
+
+@function fix-color($color-string) {
+  $color-name: str-replace(str-replace($color-string,'var(--#{$prefix}',''),')','');
+  @return get-color($color-name);
+}
+
+@function get-mix($c1, $c2, $amount) {
+  @if type-of($c1) == "color" and type-of($c2) == "color" {
+    @return mix($c1, $c2, $amount);
+  } @else {
+    @if type-of($c1) != "color" {
+      $c1: fix-color($c1);
+    }
+    @if type-of($c2) != "color" {
+      $c2: fix-color($c2);
+    }
+    @return mix($c1, $c2, $amount);
+  }
+}
+
+@function get-red($clr) {
+  @if type-of($clr) == "color" {
+    @return red($clr);
+  } @else {
+    @return red(fix-color($clr));
+  }
+}
+
+@function get-blue($clr) {
+  @if type-of($clr) == "color" {
+    @return blue($clr);
+  } @else {
+    @return red(fix-color($clr));
+  }
+}
+
+@function get-green($clr) {
+  @if type-of($clr) == "color" {
+    @return green($clr);
+  } @else {
+    @return green(fix-color($clr));
+  }
 }
 
 @function generateTextColor($text-colors) {
@@ -159,10 +202,14 @@ $prefix: map.get($settings, "prefix");
 
 @function text-contrast($color, $dark: black, $light: white) {
   $brightness: round(
-    (red($color) * 299)+ (green($color) * 587) + math.div((blue($color) * 114), 1000)
+    (get-red($color) * 299)+ (get-green($color) * 587) + math.div((get-blue(
+              $color
+            ) * 114), 1000)
   );
   $whiteness: round(
-    (red(#ffffff) * 299)+ (green(#ffffff) * 587) + math.div((blue(#ffffff) * 114), 1000)
+    (get-red(#ffffff) * 299)+ (get-green(#ffffff) * 587) + math.div((get-blue(
+              #ffffff
+            ) * 114), 1000)
   );
   @if abs($brightness) < math.div($whiteness, 2) {
     @return $dark;
@@ -337,7 +384,7 @@ $prefix: map.get($settings, "prefix");
     $rgb: map.merge(
       $rgb,
       (
-        $color-name: "#{red($v)}, #{green($v)}, #{blue($v)}",
+        $color-name: "#{get-red($v)}, #{get-green($v)}, #{get-blue($v)}",
       )
     );
   }
@@ -345,7 +392,7 @@ $prefix: map.get($settings, "prefix");
 }
 
 @function rgbValues($clr) {
-  @return "#{red($clr)}, #{green($clr)}, #{blue($clr)}";
+  @return "#{get-red($clr)}, #{get-green($clr)}, #{get-blue($clr)}";
 }
 
 @function filterColors($clrs, $mode, $values) {
