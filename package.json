@@ -3,7 +3,9 @@
   "version": "0.3.14",
   "description": "Sass Variable Theming",
   "main": "src/index.scss",
-  "bin": "./index.js",
+  "bin": {
+    "@sil/themer": "./task.mjs"
+  },
   "exports": {
     "./use": "./src/use.scss",
     "./app": "./src/index.scss"
