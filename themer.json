@@ -1,0 +1,29 @@
+{
+  "colors": {
+    "background": "#ffffff",
+    "foreground": "#111111",
+    "primary": "#01eeff",
+    "secondary": "#f7166c",
+    "tertiary": "#6a2ef7",
+    "caution": "#ffff00",
+    "warning": "#ffaa00",
+    "error": "#ff0000",
+    "info": "#0000ff",
+    "success": "#00ff00"
+  } , "settings": {
+    "prefix": "my-project",
+    "styleOutput": true,
+    "classBasedProperties": true,
+    "generateBase": true,
+    "generateTypography": true,
+    "generateColors": true,
+    "generateColorModes": true,
+    "colorModes": true,
+    "colorShades": true,
+    "colorPercentages": false,
+    "colorSteps": [10, 25, 50, 75, 90],
+    "colorText": true,
+    "breakpointNames": ["small", "medium", "large"],
+    "breakpointSizes": [0, 720, 1200]
+  }
+}

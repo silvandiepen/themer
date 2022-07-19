@@ -1,208 +1,254 @@
 @use "sass:map";
 
-$runs: 1;
-// Default theme settings
+// // Default theme settings
 $colors: (
-  background: #ffffff,
-  foreground: #111111,
-  primary: #01eeff,
-  secondary: #f7166c,
-  tertiary: #6a2ef7,
-  caution: #fed02f,
-  warning: #fd8324,
-  error: #fc1b1c,
-  info: #7abffc,
-  success: #54d577,
+  // background: #ffffff,
+  // foreground: #111111,
+  // primary: #01eeff,
+  // secondary: #f7166c,
+  // tertiary: #6a2ef7,
+  // caution: #fed02f,
+  // warning: #fd8324,
+  // error: #fc1b1c,
+  // info: #7abffc,
+  // success: #54d577,
 ) !default;
 
-// Define empty customisable map for colors
-$theme-colors: () !default;
+// // Define empty customisable map for colors
+// $theme-colors: () !default;
 
-// Colors to be used to generate variables
-$var-colors: ();
-$og-colors: ();
+// // Colors to be used to generate variables
+// $var-colors: ();
+// $og-colors: ();
 
-// Merge theme colors with custom colors
+// // Merge theme colors with custom colors
 $colors: map.merge($colors, $theme-colors) !global;
-$color-shades: ();
-$color-text: ();
-$color-generated-shades: ();
+// // $colors: map.set($colors,'background',map.get($colors,'light'));
+// // $colors: map.set($colors,'foreground',map.get($colors,'dark'));
+// $color-shades: ();
+// $color-text: ();
+// $color-generated-shades: ();
 
-$darkmode-text: ();
-$darkmode-rgb: ();
-$darkmode-shades: ();
-$darkmode-colors: ();
-$darkmode-generated: ();
+// $darkmode-text: ();
+// $darkmode-rgb: ();
+// $darkmode-shades: ();
+// $darkmode-colors: ();
+// $darkmode-generated: ();
 
-$lightmode-text: ();
-$lightmode-rgb: ();
-$lightmode-shades: ();
-$lightmode-colors: ();
-$lightmode-generated: ();
+// $lightmode-text: ();
+// $lightmode-rgb: ();
+// $lightmode-shades: ();
+// $lightmode-colors: ();
+// $lightmode-generated: ();
 
-// Generate Colors per Color Mode
+// // Generate Colors per Color Mode
 
-$has-colors-colormodes: map.get($settings, "colors", "colorModes");
-$has-colors-generate: map.get($settings, "colors", "generateColorModes");
-$has-colors-shades: map.get($settings, "colors", "shades");
-$has-colors-opacity: map.get($settings, "colors", "opacity");
-$has-colors-experimental: map.get($settings, "colors", "experimental");
-$has-colors-text: map.get($settings, "colors", "text");
-$steps: map.get($settings, colors, shadeSteps);
+// $has-colors-colormodes: map.get($settings, "colors", "colorModes");
+// $has-colors-generate: map.get($settings, "colors", "generateColorModes");
+// $has-colors-generateColorModes: false;
+// @if $has-colors-colormodes and $has-colors-generate{
+//   $has-colors-generateColorModes: true;
+// }
 
-@import "../modules/color";
+// $has-colors-shades: map.get($settings, "colors", "shades");
+// $has-colors-opacity: map.get($settings, "colors", "opacity");
+// $has-colors-experimental: map.get($settings, "colors", "experimental");
+// $has-colors-text: map.get($settings, "colors", "text");
+// $steps: map.get($settings, colors, shadeSteps);
 
-@if $app {
-  $colors: addDark($colors);
-  $colors: addLight($colors);
+// @import "../modules/color";
 
-  $og-colors: $colors !global;
+// // No-mode Colors
 
-  @if $has-colors-colormodes or $has-colors-generate {
-    $darkmode-colors: toMode("dark", $colors) !global;
-    $lightmode-colors: toMode("light", $colors) !global;
+// @if not $has-colors-generateColorModes{
 
-    // @if $has-colors-opacity {
-    $darkmode-rgb: toMode("dark", addRGB($colors));
-    $lightmode-rgb: toMode("light", addRGB($colors));
-    // }
+//   @debug "Generate Colors";
 
-    /*
-    * Generate all shades, 
-    * also in opacity mode so text colors can be generated
-    */
+// }
 
-    $darkmode-generated: generateShades(
-      $darkmode-colors,
-      $steps,
-      false
-    ) !global;
-    $lightmode-generated: generateShades(
-      $lightmode-colors,
-      $steps,
-      false
-    ) !global;
 
-    @if $has-colors-shades {
-      @if not $has-colors-opacity {
-        /*
-        *  Experimental mode;
-        */
 
-        @if $has-colors-experimental {
-          @warn "You are generating colors in experimental mode, these colors won't actually work in any browser (yet)";
-          $darkmode-shades: generateColorMixShades(
-            $darkmode-colors,
-            $steps,
-            false
-          ) !global;
-          $lightmode-shades: generateColorMixShades(
-            $lightmode-colors,
-            $steps,
-            false
-          ) !global;
-        } @else {
-          $darkmode-shades: $darkmode-generated !global;
-          $lightmode-shades: $lightmode-generated !global;
-        }
-      }
-    }
+// // Darkmode Colors
 
-    @if $has-colors-text {
-      $darkmode-text: generateTextColor($darkmode-generated) !global;
-      $lightmode-text: generateTextColor($lightmode-generated) !global;
-    }
-  }
+// @if $has-colors-generateColorModes{
 
-  @if $has-colors-opacity {
-    $darkmode-colors: toVars(
-      filterColors($darkmode-colors, "include", ("background", "foreground")),
-      "dark"
-    );
-    $darkmode-colors: map.merge(
-      $darkmode-colors,
-      addAffix(
-        toVars(
-          filterColors($darkmode-rgb, "include", ("background", "foreground")),
-          "dark",
-          false
-        ),
-        "rgb"
-      )
-    ) !global;
+//   @debug "Generate Darkmode Colors";
 
-    $lightmode-colors: toVars(
-      filterColors($lightmode-colors, "include", ("background", "foreground")),
-      "light"
-    );
-    $lightmode-colors: map.merge(
-      $lightmode-colors,
-      addAffix(
-        toVars(
-          filterColors($lightmode-rgb, "include", ("background", "foreground")),
-          "light",
-          false
-        ),
-        "rgb"
-      )
-    ) !global;
-  } @else {
-    $lightmode-colors: map.merge(
-      $lightmode-colors,
-      addAffix($lightmode-rgb, "rgb")
-    );
-    $lightmode-colors: map.merge($lightmode-colors, $lightmode-shades);
-    $lightmode-colors: map.merge($lightmode-colors, $lightmode-text) !global;
+//   @debug "COLORS:";
+//   @debug $colors;
 
-    $darkmode-colors: map.merge(
-      $darkmode-colors,
-      addAffix($darkmode-rgb, "rgb")
-    );
-    $darkmode-colors: map.merge($darkmode-colors, $darkmode-shades);
-    $darkmode-colors: map.merge($darkmode-colors, $darkmode-text) !global;
-  }
-}
+//   $darkmode-colors: addDark($colors);
+//   // @debug $darkmode-colors; 
+// }
 
-// Generate all base colors and shades.
-@if $has-colors-shades {
-  $color-generated-shades: generateShades($colors, $steps) !global;
-  @if $has-colors-opacity {
-    $color-shades: generateOpacityShades($colors, $steps) !global;
-  } @else {
-    $color-shades: $color-generated-shades;
-  }
-}
 
-@if $has-colors-text {
-  $all-colors: map.merge($colors, $color-generated-shades);
-  $color-text: generateTextColor($all-colors) !global;
-}
+// // Lightmode Colors
 
-@if $has-colors-opacity {
-  $colors: map.merge(
-    addAffix(
-      filterColors($lightmode-rgb, "exclude", ("background", "foreground")),
-      "rgb"
-    ),
-    $color-shades
-  );
-  $colors: map.merge($colors, $color-text) !global;
+// @if $has-colors-generateColorModes{
 
-  $var-colors: map.merge(
-    $colors,
-    filterColors(
-      toVars($og-colors, "light"),
-      "exclude",
-      ("background", "foreground")
-    )
-  ) !global;
+// // @debug "Generate Lightmode Colors";
 
-  $colors: map.merge($colors, $og-colors) !global;
-} @else {
-  $colors: map.merge($colors, $color-shades);
-  $colors: map.merge($colors, $color-text) !global;
-  $var-colors: $colors !global;
-}
+// }
 
-// Add all shades to the cached defaults.
-$cached-defaults: map.merge($cached-defaults, $colors) !global;
+
+
+
+// @if $app {
+
+//   $colors: addDark($colors);
+//   $colors: addLight($colors);
+
+//   $og-colors: $colors !global;
+
+//   @if $has-colors-colormodes or $has-colors-generate {
+//     $darkmode-colors: toMode("dark", $colors) !global;
+//     $lightmode-colors: toMode("light", $colors) !global;
+
+//     // @if $has-colors-opacity {
+//     $darkmode-rgb: toMode("dark", addRGB($colors));
+//     $lightmode-rgb: toMode("light", addRGB($colors));
+//     // }
+
+//     /*
+//     * Generate all shades, 
+//     * also in opacity mode so text colors can be generated
+//     */
+//     @if length($og-colors) == 0 {
+//       $darkmode-generated: generateShades(
+//         $darkmode-colors,
+//         $steps,
+//         false
+//       ) !global;
+
+//       $lightmode-generated: generateShades(
+//         $lightmode-colors,
+//         $steps,
+//         false
+//       ) !global;
+//     }
+
+//     @if $has-colors-shades {
+//       @if not $has-colors-opacity {
+//         /*
+//         *  Experimental mode;
+//         */
+
+//         @if $has-colors-experimental {
+//           @warn "You are generating colors in experimental mode, these colors won't actually work in any browser (yet)";
+//           $darkmode-shades: generateColorMixShades(
+//             $darkmode-colors,
+//             $steps,
+//             false
+//           ) !global;
+//           $lightmode-shades: generateColorMixShades(
+//             $lightmode-colors,
+//             $steps,
+//             false
+//           ) !global;
+//         } @else {
+//           $darkmode-shades: $darkmode-generated !global;
+//           $lightmode-shades: $lightmode-generated !global;
+//         }
+//       }
+//     }
+
+//     @if $has-colors-text {
+//       $darkmode-text: generateTextColor($darkmode-generated) !global;
+//       $lightmode-text: generateTextColor($lightmode-generated) !global;
+//     }
+//   }
+
+//   @if $has-colors-opacity {
+//     $darkmode-colors: toVars(
+//       filterColors($darkmode-colors, "include", ("background", "foreground")),
+//       "dark"
+//     );
+//     $darkmode-colors: map.merge(
+//       $darkmode-colors,
+//       addAffix(
+//         toVars(
+//           filterColors($darkmode-rgb, "include", ("background", "foreground")),
+//           "dark",
+//           false
+//         ),
+//         "rgb"
+//       )
+//     ) !global;
+
+//     $lightmode-colors: toVars(
+//       filterColors($lightmode-colors, "include", ("background", "foreground")),
+//       "light"
+//     );
+//     $lightmode-colors: map.merge(
+//       $lightmode-colors,
+//       addAffix(
+//         toVars(
+//           filterColors($lightmode-rgb, "include", ("background", "foreground")),
+//           "light",
+//           false
+//         ),
+//         "rgb"
+//       )
+//     ) !global;
+//   } @else {
+//     $lightmode-colors: map.merge(
+//       $lightmode-colors,
+//       addAffix($lightmode-rgb, "rgb")
+//     );
+//     $lightmode-colors: map.merge($lightmode-colors, $lightmode-shades);
+//     $lightmode-colors: map.merge($lightmode-colors, $lightmode-text) !global;
+
+//     $darkmode-colors: map.merge(
+//       $darkmode-colors,
+//       addAffix($darkmode-rgb, "rgb")
+//     );
+//     $darkmode-colors: map.merge($darkmode-colors, $darkmode-shades);
+//     $darkmode-colors: map.merge($darkmode-colors, $darkmode-text) !global;
+//   }
+
+//   // Generate all base colors and shades.
+//   @if $has-colors-shades {
+//     @if length($og-colors) == 0 {
+//       $color-generated-shades: generateShades($colors, $steps) !global;
+//       @if $has-colors-opacity and length($color-shades) == 0 {
+//         $color-shades: generateOpacityShades($colors, $steps) !global;
+//       } @else {
+//         $color-shades: $color-generated-shades;
+//       }
+//     }
+//   }
+
+//   @if $has-colors-text {
+//     $all-colors: map.merge($colors, $color-generated-shades);
+//     $color-text: generateTextColor($all-colors) !global;
+//   }
+
+//   @if $has-colors-opacity {
+//     $colors: map.merge(
+//       addAffix(
+//         filterColors($lightmode-rgb, "exclude", ("background", "foreground")),
+//         "rgb"
+//       ),
+//       $color-shades
+//     );
+//     $colors: map.merge($colors, $color-text) !global;
+
+//     $var-colors: map.merge(
+//       $colors,
+//       filterColors(
+//         toVars($og-colors, "light"),
+//         "exclude",
+//         ("background", "foreground")
+//       )
+//     ) !global;
+
+//     $colors: map.merge($colors, $og-colors) !global;
+//   } @else {
+//     $colors: map.merge($colors, $color-shades);
+//     $colors: map.merge($colors, $color-text) !global;
+//     $var-colors: $colors !global;
+//   }
+
+//   // Add all shades to the cached defaults.
+  $cached-defaults: map.merge($cached-defaults, $colors) !global;
+// }

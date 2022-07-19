@@ -50,6 +50,7 @@ $prefix: map.get($settings, "prefix");
     @warn "colors is not a map but: #{type-of($colorset)}";
     @return false;
   }
+  @return black;
 }
 
 @function getMixColor($color, $colorset: $colors, $cached: true, $name: false) {
@@ -130,7 +131,7 @@ $prefix: map.get($settings, "prefix");
 }
 
 @function generateShades($shade-colors, $shades: (), $cached: true) {
-  $add-colors: ();
+ $add-colors: ();
 
   @each $name, $value in $shade-colors {
     @if length($shades) > 0 {
@@ -249,6 +250,7 @@ $prefix: map.get($settings, "prefix");
 
   $light: var(--#{$prefix}light);
   $dark: var(--#{$prefix}dark);
+
   @if $darkmode {
     $dark: var(--#{$prefix}light);
     $light: var(--#{$prefix}dark);
@@ -342,25 +344,33 @@ $prefix: map.get($settings, "prefix");
   $bg: map.get($clrs, "background");
   $fg: map.get($clrs, "foreground");
 
-  $bg-lightness: lightness($bg);
-  $fg-lightness: lightness($fg);
 
-  $dark: $fg;
-  @if $bg-lightness < $fg-lightness {
-    $dark: $bg;
-  }
 
-  @return map.merge(
-    $clrs,
-    (
-      dark: $dark,
-    )
-  );
+  // @debug "background: #{$bg}";
+  // @debug "foreground: #{$fg}";
+
+  @return $clrs;
+  // $bg-lightness: lightness($bg);
+  // $fg-lightness: lightness($fg);
+
+  // $dark: $fg;
+  // @if $bg-lightness < $fg-lightness {
+  //   $dark: $bg;
+  // }
+
+  // @return map.merge(
+  //   $clrs,
+  //   (
+  //     dark: $dark,
+  //   )
+  // );
 }
 @function addLight($clrs) {
   $bg: map.get($clrs, "background");
   $fg: map.get($clrs, "foreground");
 
+
+  
   $bg-lightness: lightness($bg);
   $fg-lightness: lightness($fg);
 

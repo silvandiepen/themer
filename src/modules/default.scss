@@ -12,6 +12,7 @@
 }
 
 @function get-default($key) {
+
   @if length($cached-defaults) < 1 {
     $cached-defaults: map.merge($cached-defaults, $colors) !global;
     $cached-defaults: map.merge($cached-defaults, $typography) !global;

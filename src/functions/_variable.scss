@@ -92,7 +92,6 @@ $cached-variables: ();
   @if type-of($default) == "string" and $default != "" and isCamelCase($default)
   {
     $default: variable($default);
-    // @debug $default;
     $cached-variables: set-variable-cached($cache-key, $default) !global;
     @return $default;
   }
@@ -144,7 +143,10 @@ $cached-variables: ();
 /// @return {string}
 ///
 
-@function variable($var, $default: "") {
+@function variable($var, $default: "", $debug: false) {
+
+
+
   // Key to save direct responses
   $cached-key: "#{$var}+#{$default}";
 
@@ -157,7 +159,11 @@ $cached-variables: ();
   // Create variable name
   $variable: variable-name($var, $default);
 
+  $default-value: null;
+
+
   $default-value: get-variable-value($var, $default);
+
 
   // Return
   $returnValue: "";
@@ -169,7 +175,14 @@ $cached-variables: ();
     }
     $v: "";
     @if $variable != "" {
+      // @debug "default-value: #{$default-value} // type-of: #{type-of($default-value)}";
+
+      // @if $default-value != "" or $default-value != null or type-of($default-value) != null {
+
       $v: var(#{$variable}, $default-value);
+      // } @else {
+      //   $v: var(#{$variable});
+      // }
     } @else {
       $v: $default-value;
     }
@@ -179,12 +192,12 @@ $cached-variables: ();
   }
 
   $cached-variables: set-variable-cached($cached-key, $returnValue) !global;
-
   @return $returnValue;
 }
 
 // Shortcut
-@function v($key, $value: "") {
+@function v($key, $value: "", $debug: false) {
+
   @return variable($key, $value);
 }
 

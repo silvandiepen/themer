@@ -5,33 +5,33 @@ $theme-settings: () !default;
 
 // Default theme settings
 $settings: (
-  prefix: "",
-  styleOutput: true,
-  classBasedProperties: true,
-  properties: (
-    base: true,
-    typography: true,
-    colors: true,
-  ),
-  colors: (
-    colorModes: true,
-    generateColorModes: false,
-    shadeSteps: (
-      10,
-      25,
-      50,
-      75,
-      90,
-    ),
-    percentages: false,
-    shades: true,
-    text: true,
-  ),
-  breakpoints: (
-    small: 0,
-    medium: 720,
-    large: 1200,
-  ),
+  // prefix: "",
+  // styleOutput: true,
+  // classBasedProperties: true,
+  // properties: (
+  //   base: true,
+  //   typography: true,
+  //   colors: true,
+  // ),
+  // colors: (
+  //   colorModes: true,
+  //   generateColorModes: true,
+  //   shadeSteps: (
+  //     10,
+  //     25,
+  //     50,
+  //     75,
+  //     90,
+  //   ),
+  //   percentages: false,
+  //   shades: true,
+  //   text: true,
+  // ),
+  // breakpoints: (
+  //   small: 0,
+  //   medium: 720,
+  //   large: 1200,
+  // ),
 ) !default;
 
 // Merge theme settings with custom settings

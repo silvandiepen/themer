@@ -8,12 +8,10 @@ Themer can help you themifying your css.
 
 ## Usage
 
-
 In your global CSS file.
 
 ```scss
 @import "@sil/themer/app";
-
 ```
 
 In a component file, this version does come with all the functions, but without any output.
@@ -22,26 +20,55 @@ In a component file, this version does come with all the functions, but without 
 @import "@sil/themer/use";
 ```
 
-
-
 ## Customizing
+
+In order to use custom settings, colors or anything. You have to create a `themer.json` file in the root of your project. The root file can/should contain these custom settings.
+
+Example `themer.json`:
+
+```
+{
+  "colors": {
+    "background": "#ffffff",
+    "foreground": "#111111",
+    "primary": "#01eeff",
+    "secondary": "#f7166c",
+    "tertiary": "#6a2ef7"
+  },
+  "settings": {
+    "prefix": "my-project",
+  }
+}
+```
+
+When the root file is created, you run ```npx @sil/themer init` in your project. This will create a `theme.scss` file in the `src/style` folder.
+
+:::warning This will override any existing file, if the folder doesn't exist, it will be created. If you want the file anywhere else, you will have to move the file manually.
+
+:::info If you make changes to the themer.json, you will have to re-run the script.
+
+When the theme.scss file is created, you have to add import it to your file'
+
+```scss
+@import "theme.scss";
+@import "@sil/themer/app"; // or -> @import "sil/themer/use";
+```
+
+:::tip for components, create one file which includes the use and the theme at once. This file can be included again in all your components.
 
 All settings have been split up into; settings, base, colors and typography.
 
 #### Settings
 
-| key                   | value                    |
-| --------------------- | ------------------------ |
-| prefix                | `""`                     |
-| properties.base       | `true`                   |
-| properties.typography | `true`                   |
-| properties.colors     | `true`                   |
-| colors.shadeSteps     | `( 10, 25, 50, 75, 90 )` |
-| colors.shades         | `true`                   |
-| colors.text           | `true`                   |
-| breakpoints.small     | `0`                      |
-| breakpoints.medium    | `720`                    |
-| breakpoints.large     | `1200`                   |
+| key             | value                  |
+| --------------- | ---------------------- |
+| prefix          | `""`                   |
+| colorsModes     | `true`                 |
+| colorsSteps     | `10, 25, 50, 75, 90`   |
+| colorsShades    | `true`                 |
+| colorText       | `true`                 |
+| breakpointNames | `small, medium, large` |
+| breakpointSizes | `0, 720, 1200`         |
 
 #### Base
 
@@ -82,11 +109,10 @@ By default all defined code will be outputed, but if you don't need the color sh
 
 ```scss
 $theme-settings: (
-  prefix: 'my-project'
+  prefix: "my-project",
 );
 
 @import "@sil/themer/app";
-
 ```
 
 ## Functions & Mixins
@@ -187,6 +213,5 @@ $base: (
   --my-project-transition: 0.3s ease-in-out;
 }
 ```
-
 
 [gist=2d9aff65094156a9f52f67594e8000d0]

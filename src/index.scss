@@ -6,15 +6,19 @@ $app: true;
 
 $has-style: map.get($settings, "styleOutput");
 
+@import "./style/theme.scss";
 @import "./style/base.scss";
 @import "./style/reset.scss";
 @import "./style/typography.scss";
 
-/*
-  	Theme Colors
-  */
+// /*
+//   	Theme Colors
+//   */      
+
 
 @if map.get($settings, "properties", "colors") {
+
+  
   @if map.get($settings, "colors", colorModes) {
     @media (prefers-color-scheme: light) {
       body {
@@ -27,6 +31,7 @@ $has-style: map.get($settings, "styleOutput");
       }
     }
 
+
     [color-mode="dark"] {
       @include customProperties($darkmode-colors);
     }
@@ -35,6 +40,7 @@ $has-style: map.get($settings, "styleOutput");
     }
 
     @if map.get($settings, "colors", "opacity") {
+
       :root {
         @include customProperties($var-colors);
       }

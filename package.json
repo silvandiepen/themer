@@ -5,7 +5,8 @@
   "main": "src/index.scss",
   "exports": {
     "./use": "./src/use.scss",
-    "./app": "./src/index.scss"
+    "./app": "./src/index.scss",
+    "./script": "task.mjs"
   },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
@@ -15,7 +16,8 @@
     "build:mq": "sass test/media-queries.scss dist/mq.css",
     "build:variables": "sass test/variables.scss dist/variables.css",
     "build:color:opacity": "sass test/color.opacity.scss dist/color.opacity.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create:config": "node task.mjs"
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,13 @@
   },
   "homepage": "https://github.com/silvandiepen/themer#readme",
   "dependencies": {
-    "cli-block": "^1.3.7",
+    "@sil/color": "^0.1.3",
+    "@sil/jsonto": "^0.1.0",
+    "@sil/sass": "^0.0.4",
+    "prettier": "^2.7.1",
     "sass": "^1.45.1"
+  },
+  "devDependencies": {
+    "cli-block": "^1.3.8"
   }
 }
