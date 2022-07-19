@@ -43,9 +43,13 @@ Example `themer.json`:
 
 When the root file is created, you run ```npx @sil/themer init` in your project. This will create a `theme.scss` file in the `src/style` folder.
 
-:::warning This will override any existing file, if the folder doesn't exist, it will be created. If you want the file anywhere else, you will have to move the file manually.
+:::warning 
+This will override any existing file, if the folder doesn't exist, it will be created. If you want the file anywhere else, you will have to move the file manually.
+:::
 
-:::info If you make changes to the themer.json, you will have to re-run the script.
+:::info 
+If you make changes to the themer.json, you will have to re-run the script.
+:::
 
 When the theme.scss file is created, you have to add import it to your file'
 
@@ -54,7 +58,9 @@ When the theme.scss file is created, you have to add import it to your file'
 @import "@sil/themer/app"; // or -> @import "sil/themer/use";
 ```
 
-:::tip for components, create one file which includes the use and the theme at once. This file can be included again in all your components.
+:::tip 
+for components, create one file which includes the use and the theme at once. This file can be included again in all your components.
+:::
 
 All settings have been split up into; settings, base, colors and typography.
 
