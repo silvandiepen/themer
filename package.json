@@ -3,10 +3,10 @@
   "version": "0.3.13",
   "description": "Sass Variable Theming",
   "main": "src/index.scss",
+  "bin": "./index.js",
   "exports": {
     "./use": "./src/use.scss",
-    "./app": "./src/index.scss",
-    "./script": "task.mjs"
+    "./app": "./src/index.scss"
   },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
