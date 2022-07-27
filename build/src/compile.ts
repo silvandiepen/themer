@@ -13,11 +13,11 @@ const {
 
 blockHeader("Test Runs");
 
-const showTime = (time) => {
+const showTime = (time:number):string => {
   return `${(Math.round(time / 10) * -1) / 100}s`;
 };
 
-const testRun = (file, runs) => {
+const testRun = (file:string, runs:number) => {
   blockMid(file);
 
   const times = [];
@@ -25,9 +25,9 @@ const testRun = (file, runs) => {
   blockLine(`${runs} Runs`);
 
   for (let i = 0; i < runs; i++) {
-    const start = new Date();
+    const start:number = new Date().getSeconds();
     const result = sass.compile(file);
-    const end = new Date();
+    const end:number = new Date().getSeconds();
     const time = start - end;
 
     blockStepLoader({
