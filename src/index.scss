@@ -6,56 +6,39 @@ $app: true;
 
 $has-style: map.get($settings, "styleOutput");
 
-@import "./style/theme.scss";
+// @import "./style/theme.scss";
 @import "./style/base.scss";
 @import "./style/reset.scss";
 @import "./style/typography.scss";
 
 // /*
 //   	Theme Colors
-//   */      
+//   */
 
-
-@if map.get($settings, "properties", "colors") {
-
-  
-  @if map.get($settings, "colors", colorModes) {
-    @media (prefers-color-scheme: light) {
-      body {
-        @include customProperties($lightmode-colors);
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      body {
-        @include customProperties($darkmode-colors);
-      }
-    }
-
-
-    [color-mode="dark"] {
-      @include customProperties($darkmode-colors);
-    }
-    [color-mode="light"] {
+@if map.get($settings, "generateColorModes") {
+  @media (prefers-color-scheme: light) {
+    body {
       @include customProperties($lightmode-colors);
     }
-
-    @if map.get($settings, "colors", "opacity") {
-
-      :root {
-        @include customProperties($var-colors);
-      }
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      @include customProperties($darkmode-colors);
     }
-  } @else {
-    :root {
-      @include customProperties($var-colors);
-    }
+  }
+
+  [color-mode="dark"] {
+    @include customProperties($darkmode-colors);
+  }
+  [color-mode="light"] {
+    @include customProperties($lightmode-colors);
   }
 }
 
 /*
 		Theme Base
 	*/
-@if map.get($settings, "properties", "base") {
+@if map.get($settings, "generateBase") {
   :root {
     @include customProperties($base);
   }
@@ -64,7 +47,7 @@ $has-style: map.get($settings, "styleOutput");
 /*
   	Theme Typography
   */
-@if map.get($settings, "properties", "typography") {
+@if map.get($settings, "generateTypography") {
   :root {
     @include customProperties($typography);
   }

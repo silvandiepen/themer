@@ -103,6 +103,7 @@ export interface IncomingSource {
   settings?: Partial<SettingsSet>;
   base?: Partial<BaseSet>;
   typography?: Partial<TypographySet>;
+  output?: string;
 }
 export interface State {
   themer: Source;
@@ -217,6 +218,7 @@ const buildColors = (
   mixColor: COLOR,
   mixColorAlt: COLOR
 ) => {
+
   const newColors: { [key: string]: COLOR | number } = {};
 
   Object.keys(ogColors).forEach((key) => {
@@ -358,13 +360,13 @@ const fixColors = () => {
   }
 
   state.colors.og.dark =
-    state.colors.og.dark || state.colors.mode == ColorMode.LIGHT
+    state.colors.og.dark || state.colors.mode == ColorMode.DARK
       ? state.colors.og.background
       : state.colors.og.foreground;
   state.colors.og.light =
-    state.colors.og.light || state.colors.mode == ColorMode.DARK
-      ? state.colors.og.foreground
-      : state.colors.og.background;
+    state.colors.og.light || state.colors.mode == ColorMode.LIGHT
+      ? state.colors.og.background
+      : state.colors.og.foreground;
 };
 
 
@@ -373,6 +375,7 @@ const createColors = () => {
 
   const darkColor = state.colors.og.dark || "#000000";
   const lightColor = state.colors.og.light || "#ffffff";
+
 
   const lightModeColors = buildColors(
     Object.assign({}, state.colors.og),
@@ -451,7 +454,9 @@ const writeConfig = async () => {
   blockLineSuccess("Created theme Settings");
   blockLineSuccess("Created theme Base");
 
-  const themeFile = join(env.local, "src/style/theme.scss");
+  const themeFile = join(env.local, state.local.output || "src/style/theme.scss");
+
+  
   await writeFile(themeFile, fileData);
 };
 

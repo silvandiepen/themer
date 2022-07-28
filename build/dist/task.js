@@ -12,7 +12,7 @@ import { join } from "path";
 import * as url from "url";
 import prettier from "prettier";
 import { hello } from "@sil/tools";
-import { mix, hexToRgb, rgbToHex, getLightness, toHex, } from "@sil/color";
+import { mix, hexToRgb, rgbToHex, getLightness, toHex } from "@sil/color";
 import { toSassObject } from "@sil/sass";
 import { blockFooter, blockHeader, blockLine, blockMid, blockRowLine, bold, yellow, dim, blockLineSuccess, } from "cli-block";
 import { writeFile } from "fs/promises";
@@ -94,15 +94,13 @@ const getKey = (haystack, needle) => {
     });
     return Object.values(haystack)[index];
 };
-const getTextColor = (color) => {
-    return getLightness(color) > 50
+const getTextColor = (color) => getLightness(color) > 50
+    ? state.colors.og.dark
         ? state.colors.og.dark
-            ? state.colors.og.dark
-            : "#000000"
-        : state.colors.og.light
-            ? state.colors.og.light
-            : "#ffffff";
-};
+        : "#000000"
+    : state.colors.og.light
+        ? state.colors.og.light
+        : "#ffffff";
 const buildColors = (ogColors, mixColor, mixColorAlt) => {
     const newColors = {};
     Object.keys(ogColors).forEach((key) => {
@@ -197,18 +195,19 @@ const fixColors = () => {
                 : ColorMode.LIGHT;
     }
     state.colors.og.dark =
-        state.colors.og.dark || state.colors.mode == ColorMode.LIGHT
+        state.colors.og.dark || state.colors.mode == ColorMode.DARK
             ? state.colors.og.background
             : state.colors.og.foreground;
     state.colors.og.light =
-        state.colors.og.light || state.colors.mode == ColorMode.DARK
-            ? state.colors.og.foreground
-            : state.colors.og.background;
+        state.colors.og.light || state.colors.mode == ColorMode.LIGHT
+            ? state.colors.og.background
+            : state.colors.og.foreground;
 };
 const createColors = () => {
     const ogColors = Object.assign({}, state.colors.og);
     const darkColor = state.colors.og.dark || "#000000";
     const lightColor = state.colors.og.light || "#ffffff";
+    console.log(darkColor, lightColor);
     const lightModeColors = buildColors(Object.assign({}, state.colors.og), lightColor, darkColor);
     const darkModeColors = buildColors(Object.assign({}, state.colors.og), darkColor, lightColor);
     state.colors.light = Object.assign(Object.assign({}, lightModeColors), ogColors);
@@ -262,7 +261,7 @@ const writeConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     blockLineSuccess("Created theme lightMode colors");
     blockLineSuccess("Created theme Settings");
     blockLineSuccess("Created theme Base");
-    const themeFile = join(env.local, "src/style/theme.scss");
+    const themeFile = join(env.local, state.local.output || "src/style/theme.scss");
     yield writeFile(themeFile, fileData);
 });
 hello()
