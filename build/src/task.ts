@@ -10,7 +10,8 @@ import {
   getLightness,
   toHex,
   RGB,
-  COLOR
+  COLOR,
+  hexToHsl
 } from "@sil/color";
 import { toSassObject } from "@sil/sass";
 
@@ -232,13 +233,34 @@ const buildColors = (
         step
       ) as RGB;
 
+      const hsl = hexToHsl(toHex(color));
+
       newColors[`${key}${step}`] = rgbToHex(mixed);
       newColors[`${key}${step}-r`] = mixed.r;
       newColors[`${key}${step}-g`] = mixed.g;
       newColors[`${key}${step}-b`] = mixed.b;
-      newColors[`${key}${step}Text`] = getTextColor(mixed);
+      newColors[`${key}${step}-h`] = hsl.h;
+      newColors[`${key}${step}-s`] = hsl.s;
+      newColors[`${key}${step}-l`] = hsl.l;
+      newColors[`${key}${step}-text`] = getTextColor(mixed);
     });
   });
+
+  // Create RGB for input colors
+  Object.keys(ogColors).forEach((key) => {
+    const color: COLOR = getKey(ogColors,key);
+    const rgb = hexToRgb(toHex(color));
+    const hsl = hexToHsl(toHex(color));
+    newColors[`${key}-r`] = rgb.r;
+    newColors[`${key}-g`] = rgb.g;
+    newColors[`${key}-b`] = rgb.b;
+    newColors[`${key}-h`] = hsl.h;
+    newColors[`${key}-s`] = hsl.s;
+    newColors[`${key}-l`] = hsl.l;
+    newColors[`${key}-text`] = getTextColor(rgb);
+  });
+
+  // Rgb's
   return newColors;
 };
 
