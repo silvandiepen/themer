@@ -1,7 +1,17 @@
 @use "sass:map";
 
-$breakpoint-names: ();
-$breakpoints: map-deep-get($settings, "breakpoints");
+$breakpoint-names: map-get($settings, "breakpointNames");
+$breakpoint-sizes: map-get($settings, "breakpointSizes");
+
+$breakpoints: ();
+
+@for $i from 1 through length($breakpoint-names) {
+  $breakpoints: map-set(
+    $breakpoints,
+    nth($breakpoint-names, $i),
+    nth($breakpoint-sizes, $i)
+  );
+}
 
 @function breakpoint-exists($name) {
   $bp: map.get($breakpoints, $name);

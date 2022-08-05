@@ -19,7 +19,7 @@
     "build:mq": "sass test/media-queries.scss dist/mq.css",
     "build:variables": "sass test/variables.scss dist/variables.css",
     "build:color:opacity": "sass test/color.opacity.scss dist/color.opacity.css",
-    "build:scripts": "tsc",
+    "build:scripts": "tsc -p build/tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create:config": "node build/dist/task.js"
   },
@@ -41,14 +41,23 @@
   },
   "homepage": "https://github.com/silvandiepen/themer#readme",
   "dependencies": {
-    "@sil/color": "^0.1.5",
+    "@sil/case": "^0.0.2",
+    "@sil/color": "^0.1.6",
     "@sil/jsonto": "^0.1.0",
-    "@sil/sass": "^0.0.5",
+    "@sil/sass": "^0.1.2",
     "prettier": "^2.7.1",
     "sass": "^1.45.1"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-typescript": "^8.3.4",
     "cli-block": "^1.3.8",
+    "rollup": "^2.77.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "tslib": "^2.4.0",
     "typescript": "^4.7.4"
   }
 }

@@ -1,157 +1,52 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { readFileSync } from "fs";
 import { join } from "path";
-import * as url from "url";
-import prettier from "prettier";
 import { hello } from "@sil/tools";
-import { mix, hexToRgb, rgbToHex, getLightness, toHex, hexToHsl } from "@sil/color";
-import { toSassObject } from "@sil/sass";
-import { blockFooter, blockHeader, blockLine, blockMid, blockRowLine, bold, yellow, dim, blockLineSuccess, } from "cli-block";
-import { writeFile } from "fs/promises";
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-export var ColorMode;
-(function (ColorMode) {
-    ColorMode["DARK"] = "dark";
-    ColorMode["LIGHT"] = "light";
-})(ColorMode || (ColorMode = {}));
-export const defaultSettings = {
-    "colors": {
-        "background": "#ffffff",
-        "foreground": "#111111",
-        "primary": "#01eeff",
-        "secondary": "#f7166c",
-        "tertiary": "#6a2ef7",
-        "caution": "#fed02f",
-        "warning": "#fd8324",
-        "error": "#fc1b1c",
-        "info": "#7abffc",
-        "success": "#54d577"
-    },
-    "settings": {
-        "prefix": "",
-        "styleOutput": true,
-        "classBasedProperties": true,
-        "generateBase": true,
-        "generateTypography": true,
-        "generateColors": true,
-        "generateColorModes": true,
-        "colorModes": true,
-        "colorShades": true,
-        "colorPercentages": false,
-        "colorSteps": [10, 25, 50, 75, 90],
-        "colorText": true,
-        "breakpointNames": ["small", "medium", "large"],
-        "breakpointSizes": [0, 720, 1200]
-    },
-    "base": {
-        "borderRadius": "0.25rem",
-        "shadow": "0 3px 4px 0 rgba(0, 0, 0, 0.1)",
-        "space-xl": "max(calc(100vw / 12), 4em)",
-        "space-l": "max(calc(100vw / 18), 3em)",
-        "space": "max(calc(100vw / 24), 2em)",
-        "space-s": "max(calc(100vw / 48), 1em)",
-        "space-xs": "max(calc(100vw / 96), 0.5em)",
-        "transition": "0.3s ease-in-out"
-    },
-    "typography": {
-        "primaryFontFamily": [
-            "-apple-system",
-            "BlinkMacSystemFont",
-            "Segoe UI",
-            "Roboto",
-            "Helvetica",
-            "Arial",
-            "sans-serif",
-            "Apple Color Emoji",
-            "Segoe UI Emoji",
-            "Segoe UI Symbol"
-        ],
-        "secondaryFontFamily": "times",
-        "baseSize": "16px",
-        "thinWeight": 100,
-        "lightWeight": 300,
-        "normalWeight": 400,
-        "mediumWeight": 500,
-        "boldWeight": 600,
-        "heavyWeight": 900
-    }
-};
-const getKey = (haystack, needle) => {
-    let index = 0;
-    Object.keys(haystack).forEach((key, idx) => {
-        if (key == needle) {
-            index = idx;
-        }
-    });
-    return Object.values(haystack)[index];
-};
-const getTextColor = (color) => getLightness(color) > 50
-    ? state.colors.og.dark
-        ? state.colors.og.dark
-        : "#000000"
-    : state.colors.og.light
-        ? state.colors.og.light
-        : "#ffffff";
+import { hexToRgb, toHex, toRGB, toHSL, mix } from "@sil/color";
+import { jsOutput, tsOutput, sassOutput, jsonOutput } from "./output.js";
+import { toDarkMode, toLightMode, getColorMode } from "./color.js";
+import { state } from "./state.js";
+import { getKey, getTextColor, getEnv, writeFile } from "./helpers.js";
+import { ColorMode } from "./types.js";
+import { blockFooter, blockHeader, blockLine, blockMid, blockRowLine, bold, yellow, dim, blockSettings, } from "cli-block";
 const buildColors = (ogColors, mixColor, mixColorAlt) => {
     const newColors = {};
+    const mixRgb = hexToRgb(toHex(mixColor));
+    const altMixRgb = hexToRgb(toHex(mixColorAlt));
     Object.keys(ogColors).forEach((key) => {
+        const isBase = key == "background" || key == "foreground";
         state.settings.colorSteps.forEach((step) => {
             const color = getKey(ogColors, key);
-            const mixer = color == mixColor ? mixColorAlt : mixColor;
-            const mixed = mix(hexToRgb(toHex(mixer)), hexToRgb(toHex(color)), step);
-            const hsl = hexToHsl(toHex(color));
-            newColors[`${key}${step}`] = rgbToHex(mixed);
+            const mixer = color == mixColor ? altMixRgb : mixRgb;
+            const mixStep = isBase ? Math.abs(100 - step) : step;
+            const mixed = mix(mixer, toRGB(color), mixStep);
+            const hsl = toHSL(color);
+            newColors[`${key}${step}`] = toHex(mixed);
             newColors[`${key}${step}-r`] = mixed.r;
             newColors[`${key}${step}-g`] = mixed.g;
             newColors[`${key}${step}-b`] = mixed.b;
             newColors[`${key}${step}-h`] = hsl.h;
             newColors[`${key}${step}-s`] = hsl.s;
             newColors[`${key}${step}-l`] = hsl.l;
-            newColors[`${key}${step}-text`] = getTextColor(mixed);
+            newColors[`${key}${step}-text`] = getTextColor(state, mixed);
         });
     });
     Object.keys(ogColors).forEach((key) => {
         const color = getKey(ogColors, key);
-        const rgb = hexToRgb(toHex(color));
-        const hsl = hexToHsl(toHex(color));
+        const rgb = toRGB(color);
+        const hsl = toHSL(color);
+        const textColor = getTextColor(state, color);
         newColors[`${key}-r`] = rgb.r;
         newColors[`${key}-g`] = rgb.g;
         newColors[`${key}-b`] = rgb.b;
         newColors[`${key}-h`] = hsl.h;
         newColors[`${key}-s`] = hsl.s;
         newColors[`${key}-l`] = hsl.l;
-        newColors[`${key}-text`] = getTextColor(rgb);
+        newColors[`${key}-text`] = textColor;
     });
     return newColors;
 };
-const state = {
-    themer: defaultSettings,
-    local: defaultSettings,
-    colors: {
-        mode: ColorMode.LIGHT,
-        og: defaultSettings.colors,
-        default: defaultSettings.colors,
-        light: defaultSettings.colors,
-        dark: defaultSettings.colors,
-    },
-    settings: defaultSettings.settings,
-    base: defaultSettings.base,
-    typography: defaultSettings.typography,
-};
-const env = {
-    themer: __dirname,
-    local: process.cwd(),
-};
 const getFiles = () => {
+    const env = getEnv();
     try {
         const data = readFileSync(join(env.local, "themer.json"), {
             encoding: "utf8",
@@ -162,10 +57,17 @@ const getFiles = () => {
         console.error("woops");
     }
 };
-const mergeData = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+const setOutputs = async () => {
+    state.output = { ...state.themer.outputs, ...state.local.outputs };
+    await blockMid('Outputs');
+    await blockSettings(state.output);
+};
+const mergeData = async () => {
     blockMid("Colors");
-    const mergedColors = Object.assign(Object.assign({}, (((_a = state === null || state === void 0 ? void 0 : state.themer) === null || _a === void 0 ? void 0 : _a.colors) ? state.themer.colors : {})), state.local.colors);
+    const mergedColors = {
+        ...(state?.themer?.colors ? state.themer.colors : {}),
+        ...state.local.colors,
+    };
     Object.keys(mergedColors).forEach((key) => {
         let localColor = "";
         if (state.local.colors && getKey(state.local.colors, key)) {
@@ -184,31 +86,30 @@ const mergeData = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     state.colors.og = mergedColors;
     blockMid("Settings");
-    const mergedSettings = Object.assign(Object.assign({}, state.themer.settings), state.local.settings);
+    const mergedSettings = { ...state.themer.settings, ...state.local.settings };
     Object.keys(mergedSettings).forEach((key) => {
         blockRowLine([key, getKey(mergedSettings, key)]);
     });
     state.settings = mergedSettings;
     blockMid("Base");
-    const mergedBase = Object.assign(Object.assign({}, state.themer.base), state.local.base);
+    const mergedBase = { ...state.themer.base, ...state.local.base };
     Object.keys(mergedBase).forEach((key) => {
         blockRowLine([key, getKey(mergedBase, key)]);
     });
     state.base = mergedBase;
     blockMid("Typography");
-    const mergedTypography = Object.assign(Object.assign({}, state.themer.typography), state.local.typography);
+    const mergedTypography = {
+        ...state.themer.typography,
+        ...state.local.typography,
+    };
     Object.keys(mergedTypography).forEach((key) => {
         blockRowLine([key, getKey(mergedTypography, key)]);
     });
     state.typography = mergedTypography;
-});
+};
 const fixColors = () => {
     if (state.colors.og.background && state.colors.og.foreground) {
-        state.colors.mode =
-            getLightness(state.colors.og.background) <
-                getLightness(state.colors.og.foreground)
-                ? ColorMode.DARK
-                : ColorMode.LIGHT;
+        state.colors.mode = getColorMode(state.colors.og);
     }
     state.colors.og.dark =
         state.colors.og.dark || state.colors.mode == ColorMode.DARK
@@ -223,10 +124,12 @@ const createColors = () => {
     const ogColors = Object.assign({}, state.colors.og);
     const darkColor = state.colors.og.dark || "#000000";
     const lightColor = state.colors.og.light || "#ffffff";
-    const lightModeColors = buildColors(Object.assign({}, state.colors.og), lightColor, darkColor);
-    const darkModeColors = buildColors(Object.assign({}, state.colors.og), darkColor, lightColor);
-    state.colors.light = Object.assign(Object.assign({}, lightModeColors), ogColors);
-    state.colors.dark = Object.assign(Object.assign({}, darkModeColors), ogColors);
+    const darkmodeColorSet = toDarkMode(state.colors.og);
+    const lightmodeColorSet = toLightMode(state.colors.og);
+    const lightModeColors = buildColors(lightmodeColorSet, lightColor, darkColor);
+    const darkModeColors = buildColors(darkmodeColorSet, darkColor, lightColor);
+    state.colors.light = { ...ogColors, ...lightModeColors };
+    state.colors.dark = { ...ogColors, ...darkModeColors };
     if (state.colors.mode == "light") {
         state.colors.dark.background = state.colors.og.foreground;
         state.colors.dark.foreground = state.colors.og.background;
@@ -238,47 +141,29 @@ const createColors = () => {
     state.colors.default =
         state.colors.mode == "light" ? state.colors.light : state.colors.dark;
 };
-const fixObjectTypes = (input) => {
-    const sassInput = {};
-    Object.keys(input).forEach((key) => {
-        const value = getKey(input, key);
-        sassInput[key] = typeof value == "number" ? value : `${value}`;
-    });
-    return sassInput;
+const writeConfig = async () => {
+    const env = getEnv();
+    if (state.output.scss) {
+        const sassData = sassOutput(state);
+        const sassFile = join(env.local, state.output.scss);
+        await writeFile(sassFile, sassData);
+    }
+    if (state.output.js) {
+        const jsData = jsOutput(state);
+        const jsFile = join(env.local, state.output.js || "src/data/theme.js");
+        await writeFile(jsFile, jsData);
+    }
+    if (state.output.ts) {
+        const tsData = tsOutput(state);
+        const tsFile = join(env.local, state.output.ts || "src/data/theme.ts");
+        await writeFile(tsFile, tsData);
+    }
+    if (state.output.json) {
+        const jsonData = jsonOutput(state);
+        const jsonFile = join(env.local, state.output.json || "src/data/theme.json");
+        await writeFile(jsonFile, jsonData);
+    }
 };
-const writeConfig = () => __awaiter(void 0, void 0, void 0, function* () {
-    const fileData = prettier.format(`
-    $theme-colors: (
-    ${toSassObject(fixObjectTypes(state.colors.default))}
-    );
-    $darkmode-colors: (
-    ${toSassObject(fixObjectTypes(state.colors.dark))}
-    );
-    $lightmode-colors: (
-    ${toSassObject(fixObjectTypes(state.colors.light))}
-    );
-    $theme-settings: (
-      ${toSassObject(fixObjectTypes(state.settings))}
-    );
-    $theme-base: (
-      ${toSassObject(fixObjectTypes(state.base))}
-    );
-    $theme-typography: (
-      ${toSassObject(fixObjectTypes(state.typography))}
-    );
-
-    `, {
-        parser: "scss",
-    });
-    blockMid("Create themes file");
-    blockLineSuccess("Created theme colors");
-    blockLineSuccess("Created theme darkMode colors");
-    blockLineSuccess("Created theme lightMode colors");
-    blockLineSuccess("Created theme Settings");
-    blockLineSuccess("Created theme Base");
-    const themeFile = join(env.local, state.local.output || "src/style/theme.scss");
-    yield writeFile(themeFile, fileData);
-});
 hello()
     .then(() => {
     blockHeader("Themer Config");
@@ -290,6 +175,7 @@ hello()
 })
     .then(() => getFiles())
     .then(() => mergeData())
+    .then(() => setOutputs())
     .then(() => fixColors())
     .then(() => createColors())
     .then(() => writeConfig())

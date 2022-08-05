@@ -1,16 +1,16 @@
 {
+  "outputs":{
+    "ts": "./src/data/theme.ts",
+    "js": "./src/data/theme.js",
+    "json": "./src/data/theme.json",
+    "scss": "./src/style/theme.scss"
+  },
   "colors": {
     "background": "#ffffff",
-    "foreground": "#111111",
-    "primary": "#01eeff",
-    "secondary": "#f7166c",
-    "tertiary": "#6a2ef7",
-    "caution": "#ffff00",
-    "warning": "#ffaa00",
-    "error": "#ff0000",
-    "info": "#0000ff",
-    "success": "#00ff00"
-  } , "settings": {
+    "foreground": "#111111"
+  },
+
+  "settings": {
     "prefix": "my-project",
     "styleOutput": true,
     "classBasedProperties": true,

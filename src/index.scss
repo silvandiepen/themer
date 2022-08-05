@@ -15,13 +15,15 @@ $has-style: map.get($settings, "styleOutput");
 //   	Theme Colors
 //   */
 
+
 @if map.get($settings, "generateColorModes") {
-  @media (prefers-color-scheme: light) {
+
+  @media #{$lightmode} {
     body {
       @include customProperties($lightmode-colors);
     }
   }
-  @media (prefers-color-scheme: dark) {
+  @media #{$darkmode} {
     body {
       @include customProperties($darkmode-colors);
     }

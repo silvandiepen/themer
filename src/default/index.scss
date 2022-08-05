@@ -11,3 +11,39 @@ $cached-defaults: ();
 @import "../modules/settings";
 @import "../modules/default";
 @import "../functions";
+
+$darkmode: "(prefers-color-scheme: dark)";
+$lightmode: "(prefers-color-scheme: light)";
+
+@mixin darkMode() {
+  $parent: &;
+  @if nth(&, 1) == "body" and length(&) ==1 {
+    $parent: "";
+  }
+
+  @media #{$darkmode} {
+    #{$parent} {
+      @content;
+    }
+  }
+
+  [color-mode="dark"] #{$parent} {
+    @content;
+  }
+}
+@mixin lightMode() {
+  $parent: &;
+  @if nth(&, 1) == "body" and length(&) ==1 {
+    $parent: "";
+  }
+
+  @media #{$lightmode} {
+    #{$parent} {
+      @content;
+    }
+  }
+
+  [color-mode="light"] #{$parent} {
+    @content;
+  }
+}

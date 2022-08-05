@@ -76,3 +76,11 @@
   }
   @return $index;
 }
+
+
+@function map-set($map, $key, $value) {
+  $new: (
+    $key: $value,
+  );
+  @return map-merge($map, $new);
+}
