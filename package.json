@@ -9,7 +9,8 @@
   },
   "exports": {
     "./use": "./src/use.scss",
-    "./app": "./src/index.scss"
+    "./app": "./src/index.scss",
+    "./utils": "./src/utils/index.scss"
   },
   "scripts": {
     "build": "npm run build:app && npm run build:style",
